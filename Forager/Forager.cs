@@ -22,7 +22,7 @@ namespace Forager {
         private int _tourDistance;
         private int _goalDistance;
         private int _numInTour;
-        private Color[] _colours = new Color[] {
+        private readonly Color[] _colours = new Color[] {
             Color.Blue, Color.Red, Color.Brown, Color.Purple, Color.Yellow, Color.Lavender, Color.Orange, Color.Violet, Color.Black, Color.Turquoise
         };
         private GameCell _start;
@@ -67,6 +67,7 @@ namespace Forager {
                 cell.PictureBox.BackColor = _colours[0];
                 _lastClicked = cell;
                 _start = cell;
+                resetButton.Enabled = true;
                 return;
             }
 
@@ -107,6 +108,7 @@ namespace Forager {
                     g.DrawRectangle(new Pen(color, 5), 19, 0, 2, 39);
                     g.Save();
                     routeCell.PictureBox.Image = img;
+                    routeCell.IsOriginal = false;
                 }
 
                 if (cell.Col != _lastClicked.Col) {
@@ -116,6 +118,7 @@ namespace Forager {
                     g.DrawRectangle(new Pen(color, 5), 19, 19, 2, 2);
                     g.Save();
                     routeCell.PictureBox.Image = img;
+                    routeCell.IsOriginal = false;
                 }
             }
 
@@ -128,22 +131,23 @@ namespace Forager {
                     g.DrawRectangle(new Pen(color, 5), 0, 19, 39, 2);
                     g.Save();
                     routeCell.PictureBox.Image = img;
+                    routeCell.IsOriginal = false;
                 }
             }
         }
 
         private void newGameButton_Click(object sender, EventArgs e) {
+            resetButton.Enabled = false;
             distanceLabel.Text = "0";
             for (int i = 0; i < _fieldSize; i++) {
                 for (int j = 0; j < _fieldSize; j++) {
                     var cell = _cells[i][j];
-                    cell.PictureBox.Image = _grassBitmap;
+                    cell.SetImage(_grassBitmap);
                     cell.State = CellState.Grass;
                     cell.PictureBox.MouseEnter -= Shroom_MouseEnter;
                     cell.PictureBox.MouseLeave -= Shroom_MouseLeave;
                     cell.PictureBox.MouseClick -= PicBox_MouseClick;
                     cell.PictureBox.MouseClick += PicBox_MouseClick;
-                    cell.PictureBox.BackColor = Color.Transparent;
                 }
             }
 
@@ -158,7 +162,7 @@ namespace Forager {
                     continue;
 
                 cell.State = CellState.Shroom;
-                cell.PictureBox.Image = _shroomImages[num];
+                cell.SetImage(_shroomImages[num]);
                 cell.PictureBox.MouseEnter += Shroom_MouseEnter;
                 cell.PictureBox.MouseLeave += Shroom_MouseLeave;
                 _shroomCells[num] = cell;
@@ -189,5 +193,28 @@ namespace Forager {
         private void Shroom_MouseEnter(object sender, EventArgs e) => Cursor = Cursors.Hand;
 
         private void Shroom_MouseLeave(object sender, EventArgs e) => Cursor = Cursors.Default;
+
+        private void resetButton_Click(object sender, EventArgs e) {
+            _numInTour = 0;
+            _tourDistance = 0;
+            _lastClicked = null;
+            _start = null;
+            distanceLabel.Text = "0";
+            for (int i = 0; i < _fieldSize; i++) {
+                for (int j = 0; j < _fieldSize; j++) {
+                    var cell = _cells[i][j];
+                    cell.ResetImage();
+
+                    if (cell.State == CellState.Shroom) {
+                        cell.PictureBox.BackColor = Color.Transparent;
+                        cell.PictureBox.MouseEnter += Shroom_MouseEnter;
+                        cell.PictureBox.MouseLeave += Shroom_MouseLeave;
+                        cell.PictureBox.MouseClick -= PicBox_MouseClick;
+                        cell.PictureBox.MouseClick += PicBox_MouseClick;
+                    }
+                }
+            }
+            _tourCells = new HashSet<GameCell>();
+        }
     }
 }

@@ -34,16 +34,18 @@
             // 
             // panel1
             // 
-            this.panel1.Location = new System.Drawing.Point(12, 12);
+            this.panel1.Location = new System.Drawing.Point(16, 15);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(430, 430);
+            this.panel1.Size = new System.Drawing.Size(573, 529);
             this.panel1.TabIndex = 0;
             // 
             // newGameButton
             // 
-            this.newGameButton.Location = new System.Drawing.Point(12, 460);
+            this.newGameButton.Location = new System.Drawing.Point(16, 566);
+            this.newGameButton.Margin = new System.Windows.Forms.Padding(4);
             this.newGameButton.Name = "newGameButton";
-            this.newGameButton.Size = new System.Drawing.Size(75, 23);
+            this.newGameButton.Size = new System.Drawing.Size(100, 28);
             this.newGameButton.TabIndex = 1;
             this.newGameButton.Text = "New game";
             this.newGameButton.UseVisualStyleBackColor = true;
@@ -51,54 +53,61 @@
             // 
             // resetButton
             // 
-            this.resetButton.Location = new System.Drawing.Point(93, 460);
+            this.resetButton.Enabled = false;
+            this.resetButton.Location = new System.Drawing.Point(124, 566);
+            this.resetButton.Margin = new System.Windows.Forms.Padding(4);
             this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(75, 23);
+            this.resetButton.Size = new System.Drawing.Size(100, 28);
             this.resetButton.TabIndex = 2;
             this.resetButton.Text = "Reset";
             this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(322, 451);
+            this.label1.Location = new System.Drawing.Point(429, 555);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(52, 13);
+            this.label1.Size = new System.Drawing.Size(63, 16);
             this.label1.TabIndex = 3;
             this.label1.Text = "Distance:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(323, 470);
+            this.label2.Location = new System.Drawing.Point(431, 578);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 13);
+            this.label2.Size = new System.Drawing.Size(39, 16);
             this.label2.TabIndex = 4;
             this.label2.Text = "Goal:";
             // 
             // distanceLabel
             // 
             this.distanceLabel.AutoSize = true;
-            this.distanceLabel.Location = new System.Drawing.Point(391, 451);
+            this.distanceLabel.Location = new System.Drawing.Point(521, 555);
+            this.distanceLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.distanceLabel.Name = "distanceLabel";
-            this.distanceLabel.Size = new System.Drawing.Size(13, 13);
+            this.distanceLabel.Size = new System.Drawing.Size(14, 16);
             this.distanceLabel.TabIndex = 5;
             this.distanceLabel.Text = "0";
             // 
             // goalLabel
             // 
             this.goalLabel.AutoSize = true;
-            this.goalLabel.Location = new System.Drawing.Point(391, 470);
+            this.goalLabel.Location = new System.Drawing.Point(521, 578);
+            this.goalLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.goalLabel.Name = "goalLabel";
-            this.goalLabel.Size = new System.Drawing.Size(13, 13);
+            this.goalLabel.Size = new System.Drawing.Size(14, 16);
             this.goalLabel.TabIndex = 6;
             this.goalLabel.Text = "0";
             // 
             // Forager
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 500);
+            this.ClientSize = new System.Drawing.Size(621, 615);
             this.Controls.Add(this.goalLabel);
             this.Controls.Add(this.distanceLabel);
             this.Controls.Add(this.label2);
@@ -107,6 +116,7 @@
             this.Controls.Add(this.newGameButton);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Forager";
             this.Text = "Forager";
             this.ResumeLayout(false);

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Forager {
+namespace Forager.Core {
     public enum CellState {
         Shroom,
         Forager,

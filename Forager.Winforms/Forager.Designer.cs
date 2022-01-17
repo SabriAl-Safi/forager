@@ -1,4 +1,4 @@
-﻿namespace Forager {
+﻿namespace Forager.WinForms {
     partial class Forager {
         /// <summary>
         /// Required designer variable.

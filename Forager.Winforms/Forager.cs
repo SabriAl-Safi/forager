@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Forager.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,39 +11,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Forager {
+namespace Forager.WinForms {
     public partial class Forager : Form {
         private Bitmap _grassBitmap;
         private int _fieldSize = 10;
         private Bitmap[] _shroomImages;
-        private GameCell[][] _cells;
-        private GameCell _lastClicked;
-        private HashSet<GameCell> _tourCells;
-        private GameCell[] _shroomCells;
+        private Cell[][] _cells;
+        private Cell _lastClicked;
+        private HashSet<Cell> _tourCells;
+        private Cell[] _shroomCells;
         private int _tourDistance;
         private int _goalDistance;
         private int _numInTour;
-        private readonly Color[] _colours = new Color[] {
-            Color.Blue, Color.Red, Color.Brown, Color.Purple, Color.Yellow, Color.Lavender, Color.Orange, Color.Violet, Color.Black, Color.Turquoise
-        };
-        private GameCell _start;
+        private Cell _start;
 
         public Forager() {
             InitializeComponent();
-            _grassBitmap = new Bitmap(
-                new Bitmap(Directory.GetCurrentDirectory() + @"\Images\grass.jpeg"),
-                new Size(40, 40));
+            _grassBitmap = new Bitmap(new Bitmap(Directory.GetCurrentDirectory() + @"\Images\grass.jpeg"), new Size(40, 40));
             
             _shroomImages = new Bitmap[_fieldSize];
-            _cells = new GameCell[_fieldSize][];
+            _cells = new Cell[_fieldSize][];
             for (int i = 0; i < _fieldSize; i++) {
-                _cells[i] = new GameCell[_fieldSize];
+                _cells[i] = new Cell[_fieldSize];
 
                 var orig = new Bitmap(Directory.GetCurrentDirectory() + $@"\Images\{i % 10}.jpg");
                 _shroomImages[i] = new Bitmap(orig, new Size(38, 38));
 
                 for (int j = 0; j < _fieldSize; j++) {
-                    var cell = new GameCell { Row = i, Col = j, State = CellState.Grass };
+                    var cell = new Cell { Row = i, Col = j, State = CellState.Grass };
                     _cells[i][j] = cell;
                     var picBox = new PictureBox {
                         Location = new Point(43 * j, 43 * i),
@@ -58,13 +54,13 @@ namespace Forager {
         }
 
         private void PicBox_MouseClick(object sender, MouseEventArgs e) {
-            var cell = (GameCell)((PictureBox)sender).Tag;
+            var cell = (Cell)((PictureBox)sender).Tag;
 
             if (cell.State != CellState.Shroom)
                 return;
 
             if (_lastClicked == null) {
-                cell.PictureBox.BackColor = _colours[0];
+                cell.PictureBox.BackColor = Utils.Colours[0];
                 _lastClicked = cell;
                 _start = cell;
                 resetButton.Enabled = true;
@@ -75,9 +71,9 @@ namespace Forager {
             cell.PictureBox.MouseEnter -= Shroom_MouseEnter;
             cell.PictureBox.MouseLeave -= Shroom_MouseLeave;
 
-            var color = _colours[_tourCells.Count()];
+            var color = Utils.Colours[_tourCells.Count()];
             if (_numInTour < _fieldSize - 1) {
-                cell.PictureBox.BackColor = _colours[_tourCells.Count() + 1];
+                cell.PictureBox.BackColor = Utils.Colours[_tourCells.Count() + 1];
             }
 
             DrawRouteToCell(cell, color);
@@ -98,7 +94,7 @@ namespace Forager {
             }
         }
 
-        private void DrawRouteToCell(GameCell cell, Color color) {
+        private void DrawRouteToCell(Cell cell, Color color) {
             if (cell.Row != _lastClicked.Row) {
                 int rowChange = cell.Row > _lastClicked.Row ? -1 : 1;
                 for (int r = cell.Row + rowChange; r != _lastClicked.Row; r = r + rowChange) {
@@ -152,7 +148,7 @@ namespace Forager {
             }
 
             var rnd = new Random();
-            _shroomCells = new GameCell[_fieldSize];
+            _shroomCells = new Cell[_fieldSize];
             var num = 0;
             while (num < _fieldSize) {
                 var iM = rnd.Next(0, _fieldSize);
@@ -170,7 +166,7 @@ namespace Forager {
             }
 
             _lastClicked = null;
-            _tourCells = new HashSet<GameCell>();
+            _tourCells = new HashSet<Cell>();
             var matrix = new int[_shroomCells.Length][];
             for (int i = 0; i < _shroomCells.Length; i++) {
 
@@ -189,7 +185,7 @@ namespace Forager {
             _tourDistance = 0;
             _numInTour = 0;
         }
-        
+
         private void Shroom_MouseEnter(object sender, EventArgs e) => Cursor = Cursors.Hand;
 
         private void Shroom_MouseLeave(object sender, EventArgs e) => Cursor = Cursors.Default;
@@ -214,7 +210,7 @@ namespace Forager {
                     }
                 }
             }
-            _tourCells = new HashSet<GameCell>();
+            _tourCells = new HashSet<Cell>();
         }
     }
 }

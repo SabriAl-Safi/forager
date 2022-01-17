@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Forager {
+namespace Forager.WinForms {
     static class Program {
         /// <summary>
         /// The main entry point for the application.

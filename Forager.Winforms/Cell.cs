@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Forager.Core;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -6,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Forager {
-    public class GameCell {
+namespace Forager.WinForms {
+    public class Cell {
         public PictureBox PictureBox { get; set; }
         public int Row { get; set; }
         public int Col { get; set; }
@@ -17,7 +18,7 @@ namespace Forager {
         private Bitmap _originalImage;
         public bool IsOriginal;
 
-        public int DistanceTo(GameCell other) => Math.Abs(Row - other.Row) + Math.Abs(Col - other.Col);
+        public int DistanceTo(Cell other) => Math.Abs(Row - other.Row) + Math.Abs(Col - other.Col);
 
         public void SetImage(Bitmap image) {
             _originalImage = image;

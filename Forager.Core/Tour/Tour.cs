@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Forager {
+namespace Forager.Core {
     public class Tour {
         public List<int> Nodes { get; set; }
         public int Cost { get; set; }

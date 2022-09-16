@@ -22,6 +22,7 @@ namespace Forager.WinForms {
         private Cell[] _shroomCells;
         private int _tourDistance;
         private int _goalDistance;
+        private int _streak = 0;
         private int _numInTour;
         private Cell _start;
 
@@ -89,9 +90,13 @@ namespace Forager.WinForms {
 
             if (_tourDistance <= _goalDistance) {
                 MessageBox.Show("Congratulations! You've achieved the goal distance.");
+                _streak += 1;
             } else {
                 MessageBox.Show("Uh oh! There is a better route.");
+                _streak = 0;
             }
+
+            streakLabel.Text = _streak.ToString();
         }
 
         private void DrawRouteToCell(Cell cell, Color color) {

@@ -16,6 +16,7 @@ namespace Forager.WinForms {
         private Bitmap _grassBitmap;
         private int _fieldSize = 10;
         private Bitmap[] _shroomImages;
+        private int _numShrooms = 10;
         private readonly string[] _shroomName = new string[] {
             "Fly Agaric",
             "Chanterelle",
@@ -72,19 +73,20 @@ namespace Forager.WinForms {
             if (cell.State != CellState.Shroom)
                 return;
 
+            _numInTour++;
+            cell.PictureBox.MouseClick -= PicBox_MouseClick;
+            cell.PictureBox.MouseEnter -= Shroom_MouseEnter;
+
             if (_lastClicked == null) {
-                cell.PictureBox.BackColor = Utils.Colours[0];
-                _lastClicked = cell;
                 _start = cell;
+                _start.PictureBox.BackColor = Utils.Colours[0];
+                _lastClicked = _start;
                 resetButton.Enabled = true;
                 return;
             }
 
-            cell.PictureBox.MouseClick -= PicBox_MouseClick;
-            cell.PictureBox.MouseEnter -= Shroom_MouseEnter;
-
             var color = Utils.Colours[_tourCells.Count()];
-            if (_numInTour < _fieldSize - 1) {
+            if (_numInTour < _numShrooms) {
                 cell.PictureBox.BackColor = Utils.Colours[_tourCells.Count() + 1];
             }
 
@@ -94,7 +96,11 @@ namespace Forager.WinForms {
             _tourCells.Add(cell);
             distanceLabel.Text = _tourDistance.ToString();
             _lastClicked = cell;
-            _numInTour++;
+
+            if (_numInTour == _numShrooms) {
+                _start.PictureBox.MouseEnter += Shroom_MouseEnter;
+                _start.PictureBox.MouseClick += PicBox_MouseClick;
+            }
 
             if (cell != _start)
                 return;

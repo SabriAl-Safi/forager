@@ -1,14 +1,9 @@
 ﻿using Forager.Core;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Forager.WinForms {
@@ -16,7 +11,7 @@ namespace Forager.WinForms {
         private Bitmap _grassBitmap;
         private int _fieldSize = 10;
         private Bitmap[] _shroomImages;
-        private int _numShrooms = 10;
+        private int _numShrooms = 6;
         private readonly string[] _shroomName = new string[] {
             "Fly Agaric",
             "Chanterelle",
@@ -36,6 +31,7 @@ namespace Forager.WinForms {
         private int _tourDistance;
         private int _goalDistance;
         private int _streak = 0;
+        private int _topStreak = 0;
         private int _numInTour;
         private Cell _start;
 
@@ -81,7 +77,7 @@ namespace Forager.WinForms {
                 _start = cell;
                 _start.PictureBox.BackColor = Utils.Colours[0];
                 _lastClicked = _start;
-                resetButton.Enabled = true;
+                resetBoardButton.Enabled = true;
                 return;
             }
 
@@ -107,7 +103,14 @@ namespace Forager.WinForms {
 
             if (_tourDistance <= _goalDistance) {
                 MessageBox.Show("Congratulations! You've achieved the goal distance.");
-                _streak += 1;
+                _streak++;
+                if (_streak > _topStreak) {
+                    _topStreak++;
+                    topStreakLabel.Text = _topStreak.ToString();
+                }
+                if (_topStreak > 0 && !resetStreakButton.Enabled) {
+                    resetStreakButton.Enabled = true;
+                }
             } else {
                 MessageBox.Show("Uh oh! There is a better route.");
                 _streak = 0;
@@ -155,7 +158,7 @@ namespace Forager.WinForms {
         }
 
         private void newGameButton_Click(object sender, EventArgs e) {
-            resetButton.Enabled = false;
+            resetBoardButton.Enabled = false;
             distanceLabel.Text = "0";
             for (int i = 0; i < _fieldSize; i++) {
                 for (int j = 0; j < _fieldSize; j++) {
@@ -171,9 +174,9 @@ namespace Forager.WinForms {
             }
 
             var rnd = new Random();
-            _shroomCells = new Cell[_fieldSize];
+            _shroomCells = new Cell[_numShrooms];
             var num = 0;
-            while (num < _fieldSize) {
+            while (num < _numShrooms) {
                 var iM = rnd.Next(0, _fieldSize);
                 var jM = rnd.Next(0, _fieldSize);
                 var cell = _cells[iM][jM];
@@ -191,12 +194,12 @@ namespace Forager.WinForms {
 
             _lastClicked = null;
             _tourCells = new HashSet<Cell>();
-            var matrix = new int[_shroomCells.Length][];
-            for (int i = 0; i < _shroomCells.Length; i++) {
+            var matrix = new int[_numShrooms][];
 
+            for (int i = 0; i < _numShrooms; i++) {
                 var source = _shroomCells[i];
-                matrix[i] = new int[_shroomCells.Length];
-                for (int j = 0; j < _shroomCells.Length; j++) {
+                matrix[i] = new int[_numShrooms];
+                for (int j = 0; j < _numShrooms; j++) {
                     var target = _shroomCells[j];
                     matrix[i][j] = source.DistanceTo(target);
                 }
@@ -214,7 +217,7 @@ namespace Forager.WinForms {
 
         private void Shroom_MouseLeave(object sender, EventArgs e) => Cursor = Cursors.Default;
 
-        private void resetButton_Click(object sender, EventArgs e) {
+        private void resetBoardButton_Click(object sender, EventArgs e) {
             _numInTour = 0;
             _tourDistance = 0;
             _lastClicked = null;
@@ -235,6 +238,14 @@ namespace Forager.WinForms {
                 }
             }
             _tourCells = new HashSet<Cell>();
+        }
+
+        private void resetStreakButton_Click(object sender, EventArgs e) {
+            _streak = 0;
+            _topStreak = 0;
+            streakLabel.Text = "0";
+            topStreakLabel.Text = "0";
+            resetStreakButton.Enabled = false;
         }
     }
 }

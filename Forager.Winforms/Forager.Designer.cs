@@ -25,13 +25,17 @@
         private void InitializeComponent() {
             this.panel1 = new System.Windows.Forms.Panel();
             this.newGameButton = new System.Windows.Forms.Button();
-            this.resetButton = new System.Windows.Forms.Button();
+            this.resetBoardButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.distanceLabel = new System.Windows.Forms.Label();
             this.goalLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.streakLabel = new System.Windows.Forms.Label();
+            this.topStreakLabel = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.difficultyButton = new System.Windows.Forms.Button();
+            this.resetStreakButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // panel1
@@ -44,31 +48,31 @@
             // 
             // newGameButton
             // 
-            this.newGameButton.Location = new System.Drawing.Point(16, 593);
+            this.newGameButton.Location = new System.Drawing.Point(16, 560);
             this.newGameButton.Margin = new System.Windows.Forms.Padding(4);
             this.newGameButton.Name = "newGameButton";
-            this.newGameButton.Size = new System.Drawing.Size(100, 28);
+            this.newGameButton.Size = new System.Drawing.Size(110, 28);
             this.newGameButton.TabIndex = 1;
             this.newGameButton.Text = "New game";
             this.newGameButton.UseVisualStyleBackColor = true;
             this.newGameButton.Click += new System.EventHandler(this.newGameButton_Click);
             // 
-            // resetButton
+            // resetBoardButton
             // 
-            this.resetButton.Enabled = false;
-            this.resetButton.Location = new System.Drawing.Point(124, 593);
-            this.resetButton.Margin = new System.Windows.Forms.Padding(4);
-            this.resetButton.Name = "resetButton";
-            this.resetButton.Size = new System.Drawing.Size(100, 28);
-            this.resetButton.TabIndex = 2;
-            this.resetButton.Text = "Reset";
-            this.resetButton.UseVisualStyleBackColor = true;
-            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            this.resetBoardButton.Enabled = false;
+            this.resetBoardButton.Location = new System.Drawing.Point(16, 596);
+            this.resetBoardButton.Margin = new System.Windows.Forms.Padding(4);
+            this.resetBoardButton.Name = "resetBoardButton";
+            this.resetBoardButton.Size = new System.Drawing.Size(110, 28);
+            this.resetBoardButton.TabIndex = 2;
+            this.resetBoardButton.Text = "Reset Board";
+            this.resetBoardButton.UseVisualStyleBackColor = true;
+            this.resetBoardButton.Click += new System.EventHandler(this.resetBoardButton_Click);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(481, 560);
+            this.label1.Location = new System.Drawing.Point(371, 563);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(63, 16);
@@ -78,7 +82,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(481, 583);
+            this.label2.Location = new System.Drawing.Point(371, 586);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 16);
@@ -88,7 +92,7 @@
             // distanceLabel
             // 
             this.distanceLabel.AutoSize = true;
-            this.distanceLabel.Location = new System.Drawing.Point(573, 560);
+            this.distanceLabel.Location = new System.Drawing.Point(447, 563);
             this.distanceLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.distanceLabel.Name = "distanceLabel";
             this.distanceLabel.Size = new System.Drawing.Size(14, 16);
@@ -98,7 +102,7 @@
             // goalLabel
             // 
             this.goalLabel.AutoSize = true;
-            this.goalLabel.Location = new System.Drawing.Point(573, 583);
+            this.goalLabel.Location = new System.Drawing.Point(447, 586);
             this.goalLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.goalLabel.Name = "goalLabel";
             this.goalLabel.Size = new System.Drawing.Size(14, 16);
@@ -108,7 +112,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(481, 605);
+            this.label3.Location = new System.Drawing.Point(492, 564);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(49, 16);
@@ -118,25 +122,72 @@
             // streakLabel
             // 
             this.streakLabel.AutoSize = true;
-            this.streakLabel.Location = new System.Drawing.Point(573, 605);
+            this.streakLabel.Location = new System.Drawing.Point(573, 564);
             this.streakLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.streakLabel.Name = "streakLabel";
             this.streakLabel.Size = new System.Drawing.Size(14, 16);
             this.streakLabel.TabIndex = 8;
             this.streakLabel.Text = "0";
             // 
+            // topStreakLabel
+            // 
+            this.topStreakLabel.AutoSize = true;
+            this.topStreakLabel.Location = new System.Drawing.Point(573, 586);
+            this.topStreakLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.topStreakLabel.Name = "topStreakLabel";
+            this.topStreakLabel.Size = new System.Drawing.Size(14, 16);
+            this.topStreakLabel.TabIndex = 10;
+            this.topStreakLabel.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(491, 586);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(77, 16);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Top Streak:";
+            // 
+            // difficultyButton
+            // 
+            this.difficultyButton.Enabled = false;
+            this.difficultyButton.Location = new System.Drawing.Point(140, 560);
+            this.difficultyButton.Margin = new System.Windows.Forms.Padding(4);
+            this.difficultyButton.Name = "difficultyButton";
+            this.difficultyButton.Size = new System.Drawing.Size(110, 28);
+            this.difficultyButton.TabIndex = 11;
+            this.difficultyButton.Text = "Difficulty";
+            this.difficultyButton.UseVisualStyleBackColor = true;
+            // 
+            // resetStreakButton
+            // 
+            this.resetStreakButton.Enabled = false;
+            this.resetStreakButton.Location = new System.Drawing.Point(140, 596);
+            this.resetStreakButton.Margin = new System.Windows.Forms.Padding(4);
+            this.resetStreakButton.Name = "resetStreakButton";
+            this.resetStreakButton.Size = new System.Drawing.Size(110, 28);
+            this.resetStreakButton.TabIndex = 12;
+            this.resetStreakButton.Text = "Reset Streak";
+            this.resetStreakButton.UseVisualStyleBackColor = true;
+            this.resetStreakButton.Click += new System.EventHandler(this.resetStreakButton_Click);
+            // 
             // Forager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(608, 634);
+            this.Controls.Add(this.resetStreakButton);
+            this.Controls.Add(this.difficultyButton);
+            this.Controls.Add(this.topStreakLabel);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.streakLabel);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.goalLabel);
             this.Controls.Add(this.distanceLabel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.resetButton);
+            this.Controls.Add(this.resetBoardButton);
             this.Controls.Add(this.newGameButton);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -152,13 +203,17 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button newGameButton;
-        private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.Button resetBoardButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label distanceLabel;
         private System.Windows.Forms.Label goalLabel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label streakLabel;
+        private System.Windows.Forms.Label topStreakLabel;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button difficultyButton;
+        private System.Windows.Forms.Button resetStreakButton;
     }
 }
 

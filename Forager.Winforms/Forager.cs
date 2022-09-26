@@ -16,6 +16,18 @@ namespace Forager.WinForms {
         private Bitmap _grassBitmap;
         private int _fieldSize = 10;
         private Bitmap[] _shroomImages;
+        private readonly string[] _shroomName = new string[] {
+            "Fly Agaric",
+            "Chanterelle",
+            "Honey Fungus",
+            "Giant Puffball",
+            "Shaggy Inkcap",
+            "Common Morel",
+            "King Oyster",
+            "Rosy Brittlegill",
+            "Penny Bun",
+            "Grey Oyster"
+        };
         private Cell[][] _cells;
         private Cell _lastClicked;
         private HashSet<Cell> _tourCells;
@@ -149,6 +161,7 @@ namespace Forager.WinForms {
                     cell.PictureBox.MouseLeave -= Shroom_MouseLeave;
                     cell.PictureBox.MouseClick -= PicBox_MouseClick;
                     cell.PictureBox.MouseClick += PicBox_MouseClick;
+                    cell.RemoveToolTipText();
                 }
             }
 
@@ -166,6 +179,7 @@ namespace Forager.WinForms {
                 cell.SetImage(_shroomImages[num]);
                 cell.PictureBox.MouseEnter += Shroom_MouseEnter;
                 cell.PictureBox.MouseLeave += Shroom_MouseLeave;
+                cell.SetToolTipText(_shroomName[num]);
                 _shroomCells[num] = cell;
                 num++;
             }

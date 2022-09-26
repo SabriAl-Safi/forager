@@ -14,9 +14,10 @@ namespace Forager.WinForms {
         public int Col { get; set; }
         public CellState State { get; set; }
         public bool IsShroom => State == CellState.Shroom;
+        public bool IsOriginal { get; set; }
 
         private Bitmap _originalImage;
-        public bool IsOriginal;
+        private ToolTip _toolTip = new ToolTip();
 
         public int DistanceTo(Cell other) => Math.Abs(Row - other.Row) + Math.Abs(Col - other.Col);
 
@@ -33,5 +34,11 @@ namespace Forager.WinForms {
             PictureBox.Image = _originalImage;
             PictureBox.BackColor = Color.Transparent;
         }
+
+        public void SetToolTipText(string text) {
+            _toolTip.SetToolTip(PictureBox, text);
+        }
+
+        public void RemoveToolTipText() => _toolTip.RemoveAll();
     }
 }

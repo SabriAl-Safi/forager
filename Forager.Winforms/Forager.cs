@@ -82,7 +82,6 @@ namespace Forager.WinForms {
 
             cell.PictureBox.MouseClick -= PicBox_MouseClick;
             cell.PictureBox.MouseEnter -= Shroom_MouseEnter;
-            cell.PictureBox.MouseLeave -= Shroom_MouseLeave;
 
             var color = Utils.Colours[_tourCells.Count()];
             if (_numInTour < _fieldSize - 1) {

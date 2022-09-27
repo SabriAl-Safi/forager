@@ -36,6 +36,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.difficultyButton = new System.Windows.Forms.Button();
             this.resetStreakButton = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.difficultyLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // panel1
@@ -67,12 +69,12 @@
             this.resetBoardButton.TabIndex = 2;
             this.resetBoardButton.Text = "Reset Board";
             this.resetBoardButton.UseVisualStyleBackColor = true;
-            this.resetBoardButton.Click += new System.EventHandler(this.resetBoardButton_Click);
+            this.resetBoardButton.Click += new System.EventHandler(this.ResetBoard);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(371, 563);
+            this.label1.Location = new System.Drawing.Point(412, 563);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(63, 16);
@@ -82,7 +84,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(371, 586);
+            this.label2.Location = new System.Drawing.Point(412, 586);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(39, 16);
@@ -92,7 +94,7 @@
             // distanceLabel
             // 
             this.distanceLabel.AutoSize = true;
-            this.distanceLabel.Location = new System.Drawing.Point(447, 563);
+            this.distanceLabel.Location = new System.Drawing.Point(472, 563);
             this.distanceLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.distanceLabel.Name = "distanceLabel";
             this.distanceLabel.Size = new System.Drawing.Size(14, 16);
@@ -102,7 +104,7 @@
             // goalLabel
             // 
             this.goalLabel.AutoSize = true;
-            this.goalLabel.Location = new System.Drawing.Point(447, 586);
+            this.goalLabel.Location = new System.Drawing.Point(472, 586);
             this.goalLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.goalLabel.Name = "goalLabel";
             this.goalLabel.Size = new System.Drawing.Size(14, 16);
@@ -112,7 +114,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(492, 564);
+            this.label3.Location = new System.Drawing.Point(502, 564);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(49, 16);
@@ -142,7 +144,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(491, 586);
+            this.label5.Location = new System.Drawing.Point(501, 586);
             this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(77, 16);
@@ -151,7 +153,6 @@
             // 
             // difficultyButton
             // 
-            this.difficultyButton.Enabled = false;
             this.difficultyButton.Location = new System.Drawing.Point(140, 560);
             this.difficultyButton.Margin = new System.Windows.Forms.Padding(4);
             this.difficultyButton.Name = "difficultyButton";
@@ -159,6 +160,7 @@
             this.difficultyButton.TabIndex = 11;
             this.difficultyButton.Text = "Difficulty";
             this.difficultyButton.UseVisualStyleBackColor = true;
+            this.difficultyButton.Click += new System.EventHandler(this.EditDifficulty);
             // 
             // resetStreakButton
             // 
@@ -170,13 +172,35 @@
             this.resetStreakButton.TabIndex = 12;
             this.resetStreakButton.Text = "Reset Streak";
             this.resetStreakButton.UseVisualStyleBackColor = true;
-            this.resetStreakButton.Click += new System.EventHandler(this.resetStreakButton_Click);
+            this.resetStreakButton.Click += new System.EventHandler(this.ResetStreak);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(287, 563);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 16);
+            this.label4.TabIndex = 13;
+            this.label4.Text = "Difficulty:";
+            // 
+            // difficultyLabel
+            // 
+            this.difficultyLabel.AutoSize = true;
+            this.difficultyLabel.Location = new System.Drawing.Point(347, 563);
+            this.difficultyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.difficultyLabel.Name = "difficultyLabel";
+            this.difficultyLabel.Size = new System.Drawing.Size(55, 16);
+            this.difficultyLabel.TabIndex = 14;
+            this.difficultyLabel.Text = "Medium";
             // 
             // Forager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(608, 634);
+            this.Controls.Add(this.difficultyLabel);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.resetStreakButton);
             this.Controls.Add(this.difficultyButton);
             this.Controls.Add(this.topStreakLabel);
@@ -214,6 +238,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button difficultyButton;
         private System.Windows.Forms.Button resetStreakButton;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label difficultyLabel;
     }
 }
 

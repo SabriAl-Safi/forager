@@ -11,7 +11,7 @@ namespace Forager.WinForms {
         private Bitmap _grassBitmap;
         private int _fieldSize = 10;
         private Bitmap[] _shroomImages;
-        private int _numShrooms = 6;
+        private int _numShrooms = 8;
         private readonly string[] _shroomName = new string[] {
             "Fly Agaric",
             "Chanterelle",
@@ -217,7 +217,7 @@ namespace Forager.WinForms {
 
         private void Shroom_MouseLeave(object sender, EventArgs e) => Cursor = Cursors.Default;
 
-        private void resetBoardButton_Click(object sender, EventArgs e) {
+        private void ResetBoard(object sender, EventArgs e) {
             _numInTour = 0;
             _tourDistance = 0;
             _lastClicked = null;
@@ -240,12 +240,32 @@ namespace Forager.WinForms {
             _tourCells = new HashSet<Cell>();
         }
 
-        private void resetStreakButton_Click(object sender, EventArgs e) {
+        private void ResetStreak(object sender, EventArgs e) {
             _streak = 0;
             _topStreak = 0;
             streakLabel.Text = "0";
             topStreakLabel.Text = "0";
             resetStreakButton.Enabled = false;
+        }
+
+        private void EditDifficulty(object sender, EventArgs e) {
+            var dlg = new DifficultyDialog();
+            dlg.ShowDialog();
+            if (dlg.DialogResult == DialogResult.OK) {
+                _numShrooms = dlg.NumShrooms;
+            }
+
+            switch (_numShrooms) {
+                case 6:
+                    difficultyLabel.Text = "Easy";
+                    break;
+                case 8:
+                    difficultyLabel.Text = "Medium";
+                    break;
+                default:
+                    difficultyLabel.Text = "Hard";
+                    break;
+            }
         }
     }
 }

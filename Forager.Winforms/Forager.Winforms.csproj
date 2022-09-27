@@ -56,8 +56,17 @@
       <DependentUpon>Forager.cs</DependentUpon>
     </Compile>
     <Compile Include="Cell.cs" />
+    <Compile Include="DifficultyDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DifficultyDialog.Designer.cs">
+      <DependentUpon>DifficultyDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="DifficultyDialog.resx">
+      <DependentUpon>DifficultyDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forager.resx">
       <DependentUpon>Forager.cs</DependentUpon>
     </EmbeddedResource>

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace Forager.WinForms {
     public partial class Forager : Form {
         private Bitmap _grassBitmap;
-        private int _fieldSize = 10;
+        private int _fieldSize = 8;
         private Bitmap[] _shroomImages;
         private int _numShrooms = 8;
         private readonly string[] _shroomName = new string[] {
@@ -37,27 +37,41 @@ namespace Forager.WinForms {
 
         public Forager() {
             InitializeComponent();
-            _grassBitmap = new Bitmap(new Bitmap(Directory.GetCurrentDirectory() + @"\Images\grass.jpeg"), new Size(40, 40));
-            
-            _shroomImages = new Bitmap[_fieldSize];
+            DrawInitialBoard();
+        }
+
+        private void DrawInitialBoard() {
+            _grassBitmap = new Bitmap(new Bitmap(Directory.GetCurrentDirectory() + @"\Images\grass.jpeg"), new Size(400 / _fieldSize, 400 / _fieldSize));
+            _shroomImages = new Bitmap[10];
+            for (int i = 0; i < 10; i++) {
+                var orig = new Bitmap(Directory.GetCurrentDirectory() + $@"\Images\{i % 10}.jpg");
+                _shroomImages[i] = new Bitmap(orig, new Size(380 / _fieldSize, 380 / _fieldSize));
+            }
+
+            if (_cells != null && _cells.Length > 0) {
+                foreach (var row in _cells) {
+                    foreach (var cell in row) {
+                        panel1.Controls.Remove(cell.PictureBox);
+                        cell.PictureBox.Dispose();
+                    }
+                }
+            }
+
             _cells = new Cell[_fieldSize][];
             for (int i = 0; i < _fieldSize; i++) {
                 _cells[i] = new Cell[_fieldSize];
-
-                var orig = new Bitmap(Directory.GetCurrentDirectory() + $@"\Images\{i % 10}.jpg");
-                _shroomImages[i] = new Bitmap(orig, new Size(38, 38));
 
                 for (int j = 0; j < _fieldSize; j++) {
                     var cell = new Cell { Row = i, Col = j, State = CellState.Grass };
                     _cells[i][j] = cell;
                     var picBox = new PictureBox {
-                        Location = new Point(43 * j, 43 * i),
-                        Size = new Size(40, 40),
-                        Image = _grassBitmap,
+                        Location = new Point((430 / _fieldSize) * j, (430 / _fieldSize) * i),
+                        Size = new Size((400 / _fieldSize), (400 / _fieldSize)),
                         Tag = cell
                     };
                     picBox.MouseClick += PicBox_MouseClick;
                     cell.PictureBox = picBox;
+                    cell.SetImage(_grassBitmap);
                     panel1.Controls.Add(picBox);
                 }
             }
@@ -160,18 +174,7 @@ namespace Forager.WinForms {
         private void newGameButton_Click(object sender, EventArgs e) {
             resetBoardButton.Enabled = false;
             distanceLabel.Text = "0";
-            for (int i = 0; i < _fieldSize; i++) {
-                for (int j = 0; j < _fieldSize; j++) {
-                    var cell = _cells[i][j];
-                    cell.SetImage(_grassBitmap);
-                    cell.State = CellState.Grass;
-                    cell.PictureBox.MouseEnter -= Shroom_MouseEnter;
-                    cell.PictureBox.MouseLeave -= Shroom_MouseLeave;
-                    cell.PictureBox.MouseClick -= PicBox_MouseClick;
-                    cell.PictureBox.MouseClick += PicBox_MouseClick;
-                    cell.RemoveToolTipText();
-                }
-            }
+            DrawInitialBoard();
 
             var rnd = new Random();
             _shroomCells = new Cell[_numShrooms];
@@ -248,24 +251,13 @@ namespace Forager.WinForms {
             resetStreakButton.Enabled = false;
         }
 
-        private void EditDifficulty(object sender, EventArgs e) {
-            var dlg = new DifficultyDialog();
+        private void EditSettings(object sender, EventArgs e) {
+            var dlg = new SettingsDialog(_numShrooms, _fieldSize);
             dlg.ShowDialog();
-            if (dlg.DialogResult == DialogResult.OK) {
-                _numShrooms = dlg.NumShrooms;
-            }
-
-            switch (_numShrooms) {
-                case 6:
-                    difficultyLabel.Text = "Easy";
-                    break;
-                case 8:
-                    difficultyLabel.Text = "Medium";
-                    break;
-                default:
-                    difficultyLabel.Text = "Hard";
-                    break;
-            }
+            if (dlg.DialogResult != DialogResult.OK)
+                return;
+            _numShrooms = dlg.NumShrooms;
+            _fieldSize = dlg.FieldSize;
         }
     }
 }

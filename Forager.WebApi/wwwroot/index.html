@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Forager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1em;
+            margin-bottom: 10px;
+        }
+
+        .header-icon {
+            height: 1em;
+            width: 1em;
+            object-fit: contain;
+            /* Match the font size of the header */
+            font-size: 3.2em;
+        }
+
+        .fungi-title {
+            text-align: center;
+            margin: 0;
+            font-size: 3.2em;
+            font-weight: bold;
+            background: linear-gradient(90deg, #d7263d 0%, #fff 40%, #ffb400 70%, #6a994e 100%);
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 2px #fff, 2px 2px 6px #333, 0 0 0.5em #fff3cd;
+            letter-spacing: 2px;
+            padding: 16px 0;
+            -webkit-text-stroke: 1px #333;
+            text-stroke: 1px #333; /* For future compatibility */
+        }
+
+        .game-section {
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .game-info {
+            background-color: #f0f0f0;
+        }
+
+        .game-actions {
+            background-color: #f9f9f9;
+        }
+
+        .player-stats {
+            background-color: #e8f4f8;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .primary-btn {
+            background-color: #007cba;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .action-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        .end-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 3px;
+        }
+
+        input, select {
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .game-over {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        #gameDisplay {
+            display: none;
+        }
+
+        /* Board styles */
+        #boardDisplay {
+            display: grid;
+            gap: 2px;
+            background-color: #333;
+            padding: 2px;
+            margin: 10px auto;
+            width: 30vw;
+            max-width: 30vw;
+            border: 2px solid #333;
+            box-sizing: border-box;
+            aspect-ratio: 1;
+        }
+
+        .board-cell {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            aspect-ratio: 1;
+            width: 100%;
+            height: auto;
+            min-width: 0;
+            min-height: 0;
+        }
+
+        .board-cell:hover {
+            background-color: #e8f4f8;
+        }
+
+        @media (max-width: 600px) {
+            #boardDisplay {
+                max-width: 90vw;
+                max-height: 90vw;
+            }
+
+            .board-cell {
+                max-width: 28px;
+                max-height: 28px;
+                font-size: 10px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <img src="/images/0.jpg" alt="Mushroom" class="header-icon" />
+        <h1 class="fungi-title">Forager</h1>
+        <img src="/images/7.jpg" alt="Mushroom" class="header-icon" />
+    </div>
+
+    <!-- Game Board -->
+    <div class="game-section">
+        <div id="boardDisplay"></div>
+    </div>
+
+    <!-- Start Game Section -->
+    <div id="startSection" class="game-section">
+        <button class="primary-btn" onclick="startNewGame()">Start Game</button>
+        <button class="primary-btn" onclick="showSettings()">Settings</button>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settingsSection" class="game-section" style="display: none;">
+        <h2>Game Settings</h2>
+        <label for="fieldSize">Field Size:</label>
+        <input type="number" id="fieldSize" min="3" max="20" value="8">
+        <p><small>How many cells wide is the field? (3-20)</small></p>
+        <button class="primary-btn" onclick="saveSettings()">Save Settings</button>
+        <button class="primary-btn" onclick="hideSettings()">Cancel</button>
+    </div>
+
+    <!-- Game Display Section -->
+    <div id="gameDisplay">
+        <!-- Game Info -->
+        <div id="gameInfo" class="game-section game-info">
+            <h3>Game Status</h3>
+            <p><strong>Game ID:</strong> <span id="gameId"></span></p>
+            <p><strong>Turn:</strong> <span id="turnNumber"></span></p>
+            <p><strong>Current Player:</strong> <span id="currentPlayer"></span></p>
+            <p><strong>Status:</strong> <span id="gameStatus"></span></p>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messages" class="game-section" style="display: none;">
+        <h3>Messages</h3>
+        <div id="messageContent"></div>
+    </div>
+
+    <script src="game.js"></script>
+
+</body>
+</html>

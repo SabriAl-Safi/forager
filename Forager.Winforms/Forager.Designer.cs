@@ -34,10 +34,8 @@
             this.streakLabel = new System.Windows.Forms.Label();
             this.topStreakLabel = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.difficultyButton = new System.Windows.Forms.Button();
+            this.settingsButton = new System.Windows.Forms.Button();
             this.resetStreakButton = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.difficultyLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // panel1
@@ -151,16 +149,16 @@
             this.label5.TabIndex = 9;
             this.label5.Text = "Top Streak:";
             // 
-            // difficultyButton
+            // settingsButton
             // 
-            this.difficultyButton.Location = new System.Drawing.Point(140, 560);
-            this.difficultyButton.Margin = new System.Windows.Forms.Padding(4);
-            this.difficultyButton.Name = "difficultyButton";
-            this.difficultyButton.Size = new System.Drawing.Size(110, 28);
-            this.difficultyButton.TabIndex = 11;
-            this.difficultyButton.Text = "Difficulty";
-            this.difficultyButton.UseVisualStyleBackColor = true;
-            this.difficultyButton.Click += new System.EventHandler(this.EditDifficulty);
+            this.settingsButton.Location = new System.Drawing.Point(140, 560);
+            this.settingsButton.Margin = new System.Windows.Forms.Padding(4);
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(110, 28);
+            this.settingsButton.TabIndex = 11;
+            this.settingsButton.Text = "Settings";
+            this.settingsButton.UseVisualStyleBackColor = true;
+            this.settingsButton.Click += new System.EventHandler(this.EditSettings);
             // 
             // resetStreakButton
             // 
@@ -174,35 +172,13 @@
             this.resetStreakButton.UseVisualStyleBackColor = true;
             this.resetStreakButton.Click += new System.EventHandler(this.ResetStreak);
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(287, 563);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(59, 16);
-            this.label4.TabIndex = 13;
-            this.label4.Text = "Difficulty:";
-            // 
-            // difficultyLabel
-            // 
-            this.difficultyLabel.AutoSize = true;
-            this.difficultyLabel.Location = new System.Drawing.Point(347, 563);
-            this.difficultyLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.difficultyLabel.Name = "difficultyLabel";
-            this.difficultyLabel.Size = new System.Drawing.Size(55, 16);
-            this.difficultyLabel.TabIndex = 14;
-            this.difficultyLabel.Text = "Medium";
-            // 
             // Forager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(608, 634);
-            this.Controls.Add(this.difficultyLabel);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.resetStreakButton);
-            this.Controls.Add(this.difficultyButton);
+            this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.topStreakLabel);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.streakLabel);
@@ -236,10 +212,8 @@
         private System.Windows.Forms.Label streakLabel;
         private System.Windows.Forms.Label topStreakLabel;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button difficultyButton;
+        private System.Windows.Forms.Button settingsButton;
         private System.Windows.Forms.Button resetStreakButton;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label difficultyLabel;
     }
 }
 

@@ -1,0 +1,6 @@
+@Forager.WebApi_HostAddress = http://localhost:5270
+
+GET {{Forager.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

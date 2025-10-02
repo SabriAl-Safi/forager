@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forager.Tests", "Forager.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forager.Core", "Forager.Core\Forager.Core.csproj", "{F8505A15-0B5B-45F9-AF52-BF44B2BD0A37}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forager.WebApi", "Forager.WebApi\Forager.WebApi.csproj", "{C697526E-0961-4127-B4FD-3821EA561592}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F8505A15-0B5B-45F9-AF52-BF44B2BD0A37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8505A15-0B5B-45F9-AF52-BF44B2BD0A37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8505A15-0B5B-45F9-AF52-BF44B2BD0A37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C697526E-0961-4127-B4FD-3821EA561592}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C697526E-0961-4127-B4FD-3821EA561592}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C697526E-0961-4127-B4FD-3821EA561592}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C697526E-0961-4127-B4FD-3821EA561592}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

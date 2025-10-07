@@ -12,20 +12,16 @@ namespace Forager.Core.Board {
         private readonly HashSet<Cell> _tourCells = [];
         private readonly Cell[] _shroomCells;
         private readonly int _targetDistance;
-        //private readonly Cell _start;
 
+        private Cell _start = null;
         private Cell _lastClicked = null;
         private int _tourDistance = 0;
-
-        public int TurnNumber = 9;
-        public string CurrentPlayer = "Sabri";
-        public string GameStatus = "In progress";
+        private List<Cell> _lastChangedCells = [];
 
         public int NumShroomsFound => _tourCells.Count;
         public int CurrentDistance => _tourDistance;
         public int TargetDistance => _targetDistance;
-
-        public Cell[] Cells => [.._cells.SelectMany(c => c)];
+        public List<Cell> Cells => _lastChangedCells;
 
         public GameState(int fieldSize, int numShrooms) {
             _fieldSize = fieldSize;
@@ -50,6 +46,7 @@ namespace Forager.Core.Board {
                     continue;
 
                 cell.State = CellState.Shroom;
+                cell.Ctr = num;
                 _shroomCells[num] = cell;
                 num++;
             }
@@ -66,23 +63,26 @@ namespace Forager.Core.Board {
             var tsp = new TSP(matrix);
             var tour = tsp.Solve();
             _targetDistance = tour.Cost;
+            _lastChangedCells = [.. _cells.SelectMany(c => c)];
         }
 
         public void Move(int row, int col) {
             var cell = _cells[row][col];
+            _lastChangedCells = [];
             cell.State = CellState.Forager;
+            _lastChangedCells.Add(cell);
             _tourCells.Add(cell);
             if (_lastClicked != null) {
-                _lastClicked.State = CellState.Hole;
+                _lastClicked.State = _lastClicked == _start ? CellState.Start : CellState.Hole;
                 _tourDistance += cell.DistanceTo(_lastClicked);
+                _lastChangedCells.Add(_lastClicked);
+            } else {
+                _start = cell;
             }
             _lastClicked = cell;
         }
 
         public void Reset() {
-        }
-
-        public void Select() {
         }
     }
 }

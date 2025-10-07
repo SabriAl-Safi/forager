@@ -53,6 +53,7 @@ async function startNewGame() {
         if (response.ok) {
             const data = await response.json();
             currentGameId = data.gameId;
+            initialiseBoard(gameSettings.fieldSize);
             updateGameDisplay(data.state);
         } else {
             showMessage(`${response.status}`, 'error');
@@ -79,18 +80,11 @@ function updateGameDisplay(gameState) {
     document.getElementById('numShroomsFound').textContent = gameState.numShroomsFound;
     document.getElementById('currentDistance').textContent = gameState.currentDistance;
     document.getElementById('targetDistance').textContent = gameState.targetDistance;
-    renderBoard(gameState.cells);
+    updateBoard(gameState.cells);
 }
 
-function renderBoard(cells) {
+function initialiseBoard(size) {
     const boardDiv = document.getElementById('boardDisplay');
-
-    if (!cells || !Array.isArray(cells) || cells.length === 0) {
-        boardDiv.innerHTML = '<p>No board data available</p>';
-        return;
-    }
-
-    const size = Math.sqrt(cells.length);
 
     // Set grid template based on board size
     boardDiv.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
@@ -99,19 +93,31 @@ function renderBoard(cells) {
     // Clear existing cells
     boardDiv.innerHTML = '';
 
-    // Create cells
-    let shroomCtr = 0;
+    for (let row = 0; row < size; row++) {
+        for (let col = 0; col < size; col++) {
+            const cellDiv = document.createElement('div');
+            cellDiv.dataset.row = row;
+            cellDiv.dataset.col = col;
+            cellDiv.id = `${row * size + col}`;
+            boardDiv.appendChild(cellDiv);
+        }
+    }
+}
+
+function updateBoard(cells) {
+    // Update cells
     for (let idx = 0; idx < cells.length; idx++) {
         const cell = cells[idx];
-        const cellDiv = document.createElement('div');
-        cellDiv.className = cell.state === 0 ? 'shroom-cell' : 'grass-cell';
-        cellDiv.dataset.row = cell.row;
-        cellDiv.dataset.col = cell.col;
+        const cellDiv = document.getElementById(`${cell.row * gameSettings.fieldSize + cell.col}`);
+        cellDiv.innerHTML = '';
+        const isClickable = (cell.state === 0 || cell.state === 5);
+        cellDiv.className = isClickable ? 'shroom-cell' : 'grass-cell';
         const img = document.createElement('img');
         const fileName =
-            cell.state === 0 ? `${shroomCtr % 10}.jpg` :
+            cell.state === 0 ? `${cell.ctr % 10}.jpg` :
             cell.state === 4 ? 'hole.jpg' :
-            cell.state == 1 ? 'forager.jpg' :
+            cell.state === 1 ? 'forager.jpg' :
+            cell.state === 5 ? 'flaghole.jpg' :
             'grass.jpeg';
         img.src = `/images/${fileName}`;
         img.alt = cell.image;
@@ -119,16 +125,9 @@ function renderBoard(cells) {
         img.style.height = "100%";
         cellDiv.appendChild(img);
 
-        if (cell.state === 0) {
-            // Add click handler for cell interaction
+        if (isClickable) {
             cellDiv.addEventListener('click', () => onCellClick(cell.row, cell.col));
         }
-
-        if (cell.state != 2) {
-            shroomCtr++;
-        }
-
-        boardDiv.appendChild(cellDiv);
     }
 }
 

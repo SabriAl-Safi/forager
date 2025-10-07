@@ -57,7 +57,7 @@ namespace YourGame.WebApi.Controllers {
             return NotFound();
         }
 
-        private object GetGameStateResponse(GameState gameState) {
+        private static object GetGameStateResponse(GameState gameState) {
             // Convert your game state to a JSON-friendly format
             return new {
                 gameState.Cells,

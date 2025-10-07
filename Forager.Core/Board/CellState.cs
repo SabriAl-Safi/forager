@@ -9,6 +9,8 @@ namespace Forager.Core {
         Shroom,
         Forager,
         Grass,
-        Woods
+        Woods,
+        Hole,
+        Start
     }
 }

@@ -2,194 +2,83 @@
 <html>
 <head>
     <title>Forager</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1em;
-            margin-bottom: 10px;
-        }
-
-        .header-icon {
-            height: 1em;
-            width: 1em;
-            object-fit: contain;
-            /* Match the font size of the header */
-            font-size: 3.2em;
-        }
-
-        .fungi-title {
-            text-align: center;
-            margin: 0;
-            font-size: 3.2em;
-            font-weight: bold;
-            background: linear-gradient(90deg, #d7263d 0%, #fff 40%, #ffb400 70%, #6a994e 100%);
-            color: transparent;
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 2px #fff, 2px 2px 6px #333, 0 0 0.5em #fff3cd;
-            letter-spacing: 2px;
-            padding: 16px 0;
-            -webkit-text-stroke: 1px #333;
-            text-stroke: 1px #333; /* For future compatibility */
-        }
-
-        .game-section {
-            border: 1px solid #ccc;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
-        }
-
-        .game-info {
-            background-color: #f0f0f0;
-        }
-
-        .game-actions {
-            background-color: #f9f9f9;
-        }
-
-        .player-stats {
-            background-color: #e8f4f8;
-        }
-
-        button {
-            padding: 8px 16px;
-            margin: 5px;
-            cursor: pointer;
-        }
-
-        .primary-btn {
-            background-color: #007cba;
-            color: white;
-            border: none;
-            border-radius: 3px;
-        }
-
-        .action-btn {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 3px;
-        }
-
-        .end-btn {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 3px;
-        }
-
-        input, select {
-            padding: 5px;
-            margin: 5px;
-        }
-
-        .game-over {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        #gameDisplay {
-            display: none;
-        }
-
-        /* Board styles */
-        #boardDisplay {
-            display: grid;
-            gap: 2px;
-            background-color: #333;
-            padding: 2px;
-            margin: 10px auto;
-            width: 30vw;
-            max-width: 30vw;
-            border: 2px solid #333;
-            box-sizing: border-box;
-            aspect-ratio: 1;
-        }
-
-        .board-cell {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            cursor: pointer;
-            aspect-ratio: 1;
-            width: 100%;
-            height: auto;
-            min-width: 0;
-            min-height: 0;
-        }
-
-        .board-cell:hover {
-            background-color: #e8f4f8;
-        }
-
-        @media (max-width: 600px) {
-            #boardDisplay {
-                max-width: 90vw;
-                max-height: 90vw;
-            }
-
-            .board-cell {
-                max-width: 28px;
-                max-height: 28px;
-                font-size: 10px;
-            }
-        }
-
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="header-container">
         <img src="/images/0.jpg" alt="Mushroom" class="header-icon" />
         <h1 class="fungi-title">Forager</h1>
-        <img src="/images/7.jpg" alt="Mushroom" class="header-icon" />
+        <img src="/images/0.jpg" alt="Mushroom" class="header-icon" />
     </div>
 
-    <!-- Game Board -->
-    <div class="game-section">
-        <div id="boardDisplay"></div>
+    <div class="game-section flex-game">
+        <!-- Game Board -->
+        <div>
+            <div class="icon-group">
+                <button class="icon-btn" onclick="showInstructions()" aria-label="Instructions">
+                    <svg class="help-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10" fill="#e8f4f8" />
+                        <text x="12" y="16" text-anchor="middle" font-size="14" font-family="Arial" fill="#007cba" font-weight="bold">?</text>
+                    </svg>
+                </button>
+                <button class="icon-btn" onclick="showSettings()" aria-label="Settings">
+                    <svg class="cog-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true">
+                        <path d="M12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7zm7.43-2.06l1.77-1.02a.5.5 0 0 0 .18-.68l-1.68-2.91a.5.5 0 0 0-.61-.22l-2.08.83a7.03 7.03 0 0 0-1.52-.88l-.32-2.22a.5.5 0 0 0-.5-.42h-3.36a.5.5 0 0 0-.5.42l-.32 2.22a7.03 7.03 0 0 0-1.52.88l-2.08-.83a.5.5 0 0 0-.61.22l-1.68 2.91a.5.5 0 0 0 .18.68l1.77 1.02c-.04.32-.07.65-.07.98s.03.66.07.98l-1.77 1.02a.5.5 0 0 0-.18.68l1.68 2.91c.13.23.39.31.61.22l2.08-.83c.47.34.98.63 1.52.88l.32 2.22c.05.24.26.42.5.42h3.36c.24 0 .45-.18.5-.42l.32-2.22c.54-.25 1.05-.54 1.52-.88l2.08.83c.22.09.48.01.61-.22l1.68-2.91a.5.5 0 0 0-.18-.68l-1.77-1.02c.04-.32.07-.65.07-.98s-.03-.66-.07-.98z" />
+                    </svg>
+                </button>
+            </div>
+            <div id="boardDisplay"></div>
+            <div>
+                <button class="primary-btn" onclick="startNewGame()">New Game</button>
+                <button class="primary-btn" onclick="resetGame()">Reset</button>
+            </div>
+        </div>
+
+        <!-- Game Display Section -->
+        <div id="gameDisplay">
+            <!-- Game Info -->
+            <div id="gameInfo" class="game-section game-info">
+                <h3>Game Status</h3>
+                <p><strong># Mushrooms found:</strong> <span id="numShroomsFound"></span></p>
+                <p><strong>Distance:</strong> <span id="currentDistance"></span></p>
+                <p><strong>Target Distance:</strong> <span id="targetDistance"></span></p>
+            </div>
+        </div>
     </div>
 
-    <!-- Start Game Section -->
-    <div id="startSection" class="game-section">
-        <button class="primary-btn" onclick="startNewGame()">Start Game</button>
-        <button class="primary-btn" onclick="showSettings()">Settings</button>
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Game Settings</h2>
+
+            <label for="fieldSize">Field Size:</label>
+            <input type="number" id="fieldSize" min="3" max="15">
+            <p><small>How many cells wide is the field? (3-15)</small></p>
+
+            <label for="numShrooms">Number of Mushrooms:</label>
+            <input type="number" id="numShrooms" min="3" max="15">
+            <p><small>How many mushrooms are there in the field? (3-15)</small></p>
+
+            <button class="primary-btn" onclick="saveSettings()">Save Settings</button>
+            <button class="primary-btn" onclick="hideSettings()">Cancel</button>
+        </div>
     </div>
 
-    <!-- Settings Section -->
-    <div id="settingsSection" class="game-section" style="display: none;">
-        <h2>Game Settings</h2>
-        <label for="fieldSize">Field Size:</label>
-        <input type="number" id="fieldSize" min="3" max="20" value="8">
-        <p><small>How many cells wide is the field? (3-20)</small></p>
-        <button class="primary-btn" onclick="saveSettings()">Save Settings</button>
-        <button class="primary-btn" onclick="hideSettings()">Cancel</button>
-    </div>
-
-    <!-- Game Display Section -->
-    <div id="gameDisplay">
-        <!-- Game Info -->
-        <div id="gameInfo" class="game-section game-info">
-            <h3>Game Status</h3>
-            <p><strong>Game ID:</strong> <span id="gameId"></span></p>
-            <p><strong>Turn:</strong> <span id="turnNumber"></span></p>
-            <p><strong>Current Player:</strong> <span id="currentPlayer"></span></p>
-            <p><strong>Status:</strong> <span id="gameStatus"></span></p>
+    <!-- Instructions Modal -->
+    <div id="instructionsModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>How to Play Forager</h2>
+            <p>
+                Welcome to Forager!<br>
+                <ul>
+                    <li>Click on a mushroom to go and collect it.</li>
+                    <li>Your total distance is shown on the right.</li>
+                    <li>To win, collect all the mushrooms without going over the target.</li>
+                    <li>Build up a win-streak and get on the leaderboard!</li>
+                    <li>Use the settings to adjust the field size and number of mushrooms.</li>
+                </ul>
+            </p>
+            <button class="primary-btn" onclick="hideInstructions()">Close</button>
         </div>
     </div>
 

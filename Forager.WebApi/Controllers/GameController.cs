@@ -21,7 +21,6 @@ namespace YourGame.WebApi.Controllers {
 
                 return Ok(new {
                     GameId = gameId,
-                    Message = "New game created",
                     State = GetGameStateResponse(gameState)
                 });
 
@@ -30,21 +29,18 @@ namespace YourGame.WebApi.Controllers {
             }
         }
 
+        public record SelectCellRequest(int Row, int Col);
+
         [HttpPost("{gameId}/action")]
-        public IActionResult MakeMove(string gameId, [FromBody] GameActionRequest request) {
-            if (!_activeGames.ContainsKey(gameId)) {
+        public IActionResult SelectCell(string gameId, [FromBody] SelectCellRequest request) {
+            if (!_activeGames.TryGetValue(gameId, out GameState? gameState))
                 return NotFound();
-            }
 
             try {
-                var gameState = _activeGames[gameId];
-
                 // Call your existing game logic
-                // var result = gameState.ProcessAction(request.ActionType, request.Parameters);
+                gameState.Move(request.Row, request.Col);
 
                 return Ok(new {
-                    //Success = result.Success,
-                    //Message = result.Message,
                     State = GetGameStateResponse(gameState)
                 });
             } catch (Exception ex) {
@@ -67,14 +63,8 @@ namespace YourGame.WebApi.Controllers {
                 gameState.Cells,
                 gameState.NumShroomsFound,
                 gameState.CurrentDistance,
-                gameState.GoalDistance
+                gameState.TargetDistance
             };
         }
-    }
-
-    // Request models
-    public class GameActionRequest {
-        public string ActionType { get; set; } // e.g., "move", "attack", "buy", etc.
-        public Dictionary<string, object> Parameters { get; set; } // Action-specific data
     }
 }

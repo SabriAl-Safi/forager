@@ -63,7 +63,8 @@ namespace YourGame.WebApi.Controllers {
                 gameState.Cells,
                 gameState.NumShroomsFound,
                 gameState.CurrentDistance,
-                gameState.TargetDistance
+                gameState.TargetDistance,
+                gameState.IsFinished
             };
         }
     }

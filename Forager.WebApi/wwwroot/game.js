@@ -5,14 +5,18 @@ let gameSettings = {
 };
 const apiBase = '/api/game';
 
-function showSettings() {
-    document.getElementById('settingsModal').style.display = 'block';
-    document.getElementById('fieldSize').value = gameSettings.fieldSize;
-    document.getElementById('numShrooms').value = gameSettings.numShrooms;
+function showModal(id) {
+    document.getElementById(id).style.display = 'block';
 }
 
-function hideSettings() {
-    document.getElementById('settingsModal').style.display = 'none';
+function hideModal(id) {
+    document.getElementById(id).style.display = 'none';
+}
+
+function showSettings() {
+    showModal('settingsModal');
+    document.getElementById('fieldSize').value = gameSettings.fieldSize;
+    document.getElementById('numShrooms').value = gameSettings.numShrooms;
 }
 
 function saveSettings() {
@@ -33,11 +37,9 @@ function saveSettings() {
         return;
     }
 
-    hideSettings();
+    hideModal('settingsModal');
 }
 
-const showInstructions = () => document.getElementById('instructionsModal').style.display = 'block';
-const hideInstructions = () => document.getElementById('instructionsModal').style.display = 'none';
 
 async function startNewGame() {
     try {
@@ -65,22 +67,27 @@ async function startNewGame() {
 
 window.onload = function () { startNewGame(); }
 
-async function endGame() {
-    if (!currentGameId) return;
-
-    try {
-        await fetch(`${apiBase}/${currentGameId}`, { method: 'DELETE' });
-        resetGame();
-    } catch (error) {
-        showMessage(`Error: ${error.message}`, 'error');
-    }
-}
-
 function updateGameDisplay(gameState) {
     document.getElementById('numShroomsFound').textContent = gameState.numShroomsFound;
     document.getElementById('currentDistance').textContent = gameState.currentDistance;
     document.getElementById('targetDistance').textContent = gameState.targetDistance;
     updateBoard(gameState.cells);
+
+    if (!gameState.isFinished) {
+        return;
+    }
+
+    if (gameState.numShroomsFound < gameSettings.numShrooms) {
+        document.getElementById('tooFewModal').style.display = 'block';
+        return;
+    }
+
+    if (gameState.currentDistance > gameState.targetDistance) {
+        document.getElementById('tooFarModal').style.display = 'block';
+        return;
+    }
+
+    document.getElementById('winModal').style.display = 'block';
 }
 
 function initialiseBoard(size) {
@@ -115,10 +122,10 @@ function updateBoard(cells) {
         const img = document.createElement('img');
         const fileName =
             cell.state === 0 ? `${cell.ctr % 10}.jpg` :
-            cell.state === 4 ? 'hole.jpg' :
-            cell.state === 1 ? 'forager.jpg' :
-            cell.state === 5 ? 'flaghole.jpg' :
-            'grass.jpeg';
+                cell.state === 4 ? 'hole.jpg' :
+                    cell.state === 1 ? 'forager.jpg' :
+                        cell.state === 5 ? 'flaghole.jpg' :
+                            'grass.jpeg';
         img.src = `/images/${fileName}`;
         img.alt = cell.image;
         img.style.width = "100%";
@@ -164,9 +171,4 @@ function showMessage(message, type) {
 }
 
 function resetGame() {
-    currentGameId = null;
-    document.getElementById('startSection').style.display = 'block';
-    document.getElementById('gameDisplay').style.display = 'none';
-    document.getElementById('gameActions').style.display = 'block';
-    showMessage('Game ended', 'success');
 }

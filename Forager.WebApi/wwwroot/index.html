@@ -15,7 +15,7 @@
         <!-- Game Board -->
         <div>
             <div class="icon-group">
-                <button class="icon-btn" onclick="showInstructions()" aria-label="Instructions">
+                <button class="icon-btn" onclick="showModal('instructionsModal')" aria-label="Instructions">
                     <svg class="help-icon" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true">
                         <circle cx="12" cy="12" r="10" fill="#e8f4f8" />
                         <text x="12" y="16" text-anchor="middle" font-size="14" font-family="Arial" fill="#007cba" font-weight="bold">?</text>
@@ -60,7 +60,7 @@
             <p><small>How many mushrooms are there in the field? (3-15)</small></p>
 
             <button class="primary-btn" onclick="saveSettings()">Save Settings</button>
-            <button class="primary-btn" onclick="hideSettings()">Cancel</button>
+            <button class="primary-btn" onclick="hideModal('settingsModal')">Cancel</button>
         </div>
     </div>
 
@@ -73,12 +73,38 @@
                 <ul>
                     <li>Click on a mushroom to go and collect it.</li>
                     <li>Your total distance is shown on the right.</li>
-                    <li>To win, collect all the mushrooms without going over the target.</li>
-                    <li>Build up a win-streak and get on the leaderboard!</li>
+                    <li>Collect all the mushrooms without going over the target distance.</li>
                     <li>Use the settings to adjust the field size and number of mushrooms.</li>
                 </ul>
             </p>
-            <button class="primary-btn" onclick="hideInstructions()">Close</button>
+            <button class="primary-btn" onclick="hideModal('instructionsModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Win Modal -->
+    <div id="winModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Congratulations</h2>
+            <p>Efficient foraging! You collected all the mushrooms in the optimal distance.</p>
+            <button class="primary-btn" onclick="hideModal('winModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Too Few Modal -->
+    <div id="tooFewModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Uh oh!</h2>
+            <p>You didn't collect all the mushrooms. Click Reset to try again.</p>
+            <button class="primary-btn" onclick="hideModal('tooFewModal')">Close</button>
+        </div>
+    </div>
+
+    <!-- Too Far Modal -->
+    <div id="tooFarModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>Uh oh!</h2>
+            <p>There's a faster way to collect all the mushrooms. Click Reset to try again.</p>
+            <button class="primary-btn" onclick="hideModal('tooFarModal')">Close</button>
         </div>
     </div>
 

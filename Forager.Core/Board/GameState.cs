@@ -17,11 +17,13 @@ namespace Forager.Core.Board {
         private Cell _lastClicked = null;
         private int _tourDistance = 0;
         private List<Cell> _lastChangedCells = [];
+        private bool _isFinished = false;
 
         public int NumShroomsFound => _tourCells.Count;
         public int CurrentDistance => _tourDistance;
         public int TargetDistance => _targetDistance;
         public List<Cell> Cells => _lastChangedCells;
+        public bool IsFinished => _isFinished;
 
         public GameState(int fieldSize, int numShrooms) {
             _fieldSize = fieldSize;
@@ -76,6 +78,7 @@ namespace Forager.Core.Board {
                 _lastClicked.State = _lastClicked == _start ? CellState.Start : CellState.Hole;
                 _tourDistance += cell.DistanceTo(_lastClicked);
                 _lastChangedCells.Add(_lastClicked);
+                _isFinished = (cell == _start);
             } else {
                 _start = cell;
             }

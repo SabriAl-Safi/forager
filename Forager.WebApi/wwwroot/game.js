@@ -116,27 +116,26 @@ function updateBoard(cells) {
     for (let idx = 0; idx < cells.length; idx++) {
         const cell = cells[idx];
         const cellDiv = document.getElementById(`${cell.row * gameSettings.fieldSize + cell.col}`);
-        cellDiv.innerHTML = '';
         const isClickable = (cell.state === 0 || cell.state === 5);
         cellDiv.className = isClickable ? 'shroom-cell' : 'grass-cell';
         const img = document.createElement('img');
-        const fileName =
-            cell.state === 0 ? `${cell.ctr % 10}.jpg` :
-                cell.state === 4 ? 'hole.jpg' :
-                    cell.state === 1 ? 'forager.jpg' :
-                        cell.state === 5 ? 'flaghole.jpg' :
-                            'grass.jpeg';
-        img.src = `/images/${fileName}`;
-        img.alt = cell.image;
+        img.src = `/images/${getCellFileName(cell)}`;
         img.style.width = "100%";
         img.style.height = "100%";
-        cellDiv.appendChild(img);
+        cellDiv.replaceChildren(img);
 
         if (isClickable) {
             cellDiv.addEventListener('click', () => onCellClick(cell.row, cell.col));
         }
     }
 }
+
+const getCellFileName = (cell) =>
+    cell.state === 0 ? `${cell.ctr % 10}.jpg` :
+        cell.state === 4 ? 'hole.jpg' :
+            cell.state === 1 ? 'forager.jpg' :
+                cell.state === 5 ? 'flaghole.jpg' :
+                    'grass.jpeg';
 
 async function onCellClick(row, col) {
     try {

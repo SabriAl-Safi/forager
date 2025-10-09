@@ -105,7 +105,7 @@ function initialiseBoard(size) {
             const cellDiv = document.createElement('div');
             cellDiv.dataset.row = row;
             cellDiv.dataset.col = col;
-            cellDiv.id = `${row * size + col}`;
+            cellDiv.id = `${row},${col}`;
             boardDiv.appendChild(cellDiv);
         }
     }
@@ -115,7 +115,7 @@ function updateBoard(cells) {
     // Update cells
     for (let idx = 0; idx < cells.length; idx++) {
         const cell = cells[idx];
-        const cellDiv = document.getElementById(`${cell.row * gameSettings.fieldSize + cell.col}`);
+        const cellDiv = document.getElementById(`${cell.row},${cell.col}`);
         const isClickable = (cell.state === 0 || cell.state === 5);
         cellDiv.className = isClickable ? 'shroom-cell' : 'grass-cell';
         const img = document.createElement('img');
@@ -124,8 +124,9 @@ function updateBoard(cells) {
         img.style.height = "100%";
         cellDiv.replaceChildren(img);
 
+        cellDiv.removeEventListener('click', onCellClick);
         if (isClickable) {
-            cellDiv.addEventListener('click', () => onCellClick(cell.row, cell.col));
+            cellDiv.addEventListener('click', onCellClick);
         }
     }
 }
@@ -138,12 +139,12 @@ const getCellFileName = (cell) =>
                     cell.isTrodden ? 'troddengrass.jpg' :
                         'grass.jpg';
 
-async function onCellClick(row, col) {
+async function onCellClick(e) {
     try {
         const response = await fetch(`${apiBase}/${currentGameId}/action`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ Row: row, Col: col })
+            body: JSON.stringify({ Row: e.currentTarget.dataset.row, Col: e.currentTarget.dataset.col })
         });
 
         if (response.ok) {
@@ -170,5 +171,20 @@ function showMessage(message, type) {
     }, 5000);
 }
 
-function resetGame() {
+async function resetGame() {
+    try {
+        const response = await fetch(`${apiBase}/${currentGameId}/reset`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            updateGameDisplay(data.state);
+        } else {
+            showMessage(`${response.status}`, 'error');
+        }
+    } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+    }
 }

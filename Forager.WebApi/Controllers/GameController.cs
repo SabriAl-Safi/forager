@@ -48,14 +48,26 @@ namespace YourGame.WebApi.Controllers {
             }
         }
 
-        [HttpDelete("{gameId}")]
-        public IActionResult EndGame(string gameId) {
-            if (_activeGames.ContainsKey(gameId)) {
-                _activeGames.Remove(gameId);
-                return Ok(new { Message = "Game ended" });
+        [HttpPost("{gameId}/reset")]
+        public IActionResult ResetGame(string gameId) {
+            if (!_activeGames.TryGetValue(gameId, out GameState? gameState))
+                return NotFound();
+
+            try {
+                // Call your existing game logic
+                gameState.Reset();
+
+                return Ok(new {
+                    State = GetGameStateResponse(gameState)
+                });
+            } catch (Exception ex) {
+                return BadRequest($"Error processing action: {ex.Message}");
             }
-            return NotFound();
         }
+
+        [HttpDelete("{gameId}")]
+        public IActionResult EndGame(string gameId) =>
+            _activeGames.Remove(gameId) ? Ok(new { Message = "Game ended" }) : NotFound();
 
         private static object GetGameStateResponse(GameState gameState) {
             // Convert your game state to a JSON-friendly format

@@ -14,6 +14,7 @@ namespace Forager.Core {
         public bool IsOriginal { get; set; }
         public bool IsShroom => State == CellState.Shroom;
         public int Ctr { get; set; } = 0;
+        public bool IsTrodden { get; set; } = false;
 
         public int DistanceTo(Cell other) => Math.Abs(Row - other.Row) + Math.Abs(Col - other.Col);
     }

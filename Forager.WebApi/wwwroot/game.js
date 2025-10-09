@@ -135,7 +135,8 @@ const getCellFileName = (cell) =>
         cell.state === 4 ? 'hole.jpg' :
             cell.state === 1 ? 'forager.jpg' :
                 cell.state === 5 ? 'flaghole.jpg' :
-                    'grass.jpeg';
+                    cell.isTrodden ? 'troddengrass.jpg' :
+                        'grass.jpg';
 
 async function onCellClick(row, col) {
     try {

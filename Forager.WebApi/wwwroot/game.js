@@ -83,14 +83,14 @@ const isTroddenGrass = (cell) => (cell.state === 2 && cell.isTrodden);
 async function onCellClick(e) {
     const response = await postJson(`${apiBase}/${currentGameId}/action`, { Row: e.currentTarget.dataset.row, Col: e.currentTarget.dataset.col });
     if (response.ok) {
-        updateGameDisplay(await response.json());
+        updateGameDisplay((await response.json()).state);
     }
 }
 
 async function resetGame() {
     const response = await postJson(`${apiBase}/${currentGameId}/reset`, {});
     if (response.ok) {
-        updateGameDisplay(await response.json());
+        updateGameDisplay((await response.json()).state);
     }
 }
 

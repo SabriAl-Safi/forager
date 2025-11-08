@@ -14,7 +14,7 @@ namespace Forager.Tests.Board {
         private int _numShrooms = 10;
         private GameState _gameState { get; set; }
 
-        private void BuildGameState() => _gameState = new GameState(_fieldSize, _numShrooms);
+        private void BuildGameState() => _gameState = new GameState(_fieldSize, _numShrooms, 0);
 
         [Test]
         public void RouteTo() {

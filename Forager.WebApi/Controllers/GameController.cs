@@ -1,7 +1,7 @@
 ﻿using Forager.Core.Board;
 using Microsoft.AspNetCore.Mvc;
 
-namespace YourGame.WebApi.Controllers {
+namespace Forager.WebApi.Controllers {
     [Route("api/[controller]")]
     public class GameController : ControllerBase {
         // In-memory storage for demo - use database for production

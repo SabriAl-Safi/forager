@@ -74,7 +74,7 @@ function updateBoard(cells) {
     }
 }
 
-const cellFiles = { 1: 'forager-80x80.png', 2: 'grass-80x80.png', 4: 'hole-80x80.png', 5: 'flaghole-80x80.png' };
+const cellFiles = { 1: 'forager-80x80.png', 2: 'grass-80x80.png', 4: 'hole-80x80.png', 5: 'flaghole-80x80.png', 6: 'stone.jpg' };
 const getCellFileName = (cell) => cell.state === 0 ? `${cell.ctr % 10}.jpg` : isTroddenGrass(cell) ? `troddengrass-80x80.png` : cellFiles[cell.state];
 const isTroddenGrass = (cell) => (cell.state === 2 && cell.isTrodden);
 

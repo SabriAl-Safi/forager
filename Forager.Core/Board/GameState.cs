@@ -12,7 +12,7 @@ namespace Forager.Core.Board {
         private readonly HashSet<Cell> _tourCells = [];
         private readonly Cell[] _shroomCells;
         private readonly int _targetDistance;
-        private readonly int _numStoneCells;
+        private readonly int numStoneWalls;
 
         private static readonly HashSet<CellState> _shroomPhases = [
             CellState.Start, CellState.Hole, CellState.Forager
@@ -36,7 +36,7 @@ namespace Forager.Core.Board {
             _fieldSize = fieldSize;
             _numShrooms = numShrooms;
             _cells = new Cell[_fieldSize][];
-            _numStoneCells = pcStone * fieldSize * fieldSize / 100;
+            numStoneWalls = pcStone * fieldSize * fieldSize / 100;
 
             for (int i = 0; i < _fieldSize; i++) {
                 _cells[i] = new Cell[_fieldSize];
@@ -47,21 +47,50 @@ namespace Forager.Core.Board {
             }
 
             var rnd = new Random();
-            _shroomCells = new Cell[_numShrooms];
+            SpawnStoneWall(rnd);
+            _shroomCells = SpawnShrooms(rnd);
+
+            var matrix = GetDistanceMatrix();
+            var tsp = new TSP(matrix);
+            var tour = tsp.Solve();
+            _targetDistance = tour.Cost;
+            _lastChangedCells = [.. AllCells];
+        }
+
+        private void SpawnStoneWall(Random rnd) {
+            var num = 0;
+            while (num < numStoneWalls) {
+                var iM = rnd.Next(0, _fieldSize);
+                var jM = rnd.Next(0, _fieldSize);
+                var cell = _cells[iM][jM];
+                if (cell.IsShroom || cell.State == CellState.Stone)
+                    continue;
+
+                cell.State = CellState.Stone;
+                cell.Ctr = num;
+                num++;
+            }
+        }
+
+        private Cell[] SpawnShrooms(Random rnd) {
+            var shroomCells = new Cell[_numShrooms];
             var num = 0;
             while (num < _numShrooms) {
                 var iM = rnd.Next(0, _fieldSize);
                 var jM = rnd.Next(0, _fieldSize);
                 var cell = _cells[iM][jM];
-                if (cell.IsShroom)
+                if (cell.IsShroom || cell.State == CellState.Stone)
                     continue;
 
                 cell.State = CellState.Shroom;
                 cell.Ctr = num;
-                _shroomCells[num] = cell;
+                shroomCells[num] = cell;
                 num++;
             }
+            return shroomCells;
+        }
 
+        private int[][] GetDistanceMatrix() {
             var matrix = new int[_numShrooms][];
             for (int i = 0; i < _numShrooms; i++) {
                 var source = _shroomCells[i];
@@ -70,11 +99,7 @@ namespace Forager.Core.Board {
                     matrix[i][j] = source.DistanceTo(_shroomCells[j]);
                 }
             }
-
-            var tsp = new TSP(matrix);
-            var tour = tsp.Solve();
-            _targetDistance = tour.Cost;
-            _lastChangedCells = [.. _cells.SelectMany(c => c)];
+            return matrix;
         }
 
         public void Move(int toRow, int toCol) {

@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace Forager.Tests.Board {
     [TestFixture]
     public class GameStateTests {
-        private int _fieldSize = 10;
-        private int _numShrooms = 10;
-        private GameState _gameState { get; set; }
+        private static int _fieldSize = 10;
+        private static int _numShrooms = 10;
+        private static GameState _gameState { get; set; }
 
-        private void BuildGameState() => _gameState = new GameState(_fieldSize, _numShrooms, 0);
+        private static void BuildGameState() => _gameState = new GameState(_fieldSize, _numShrooms, 0);
 
         [Test]
         public void RouteTo() {

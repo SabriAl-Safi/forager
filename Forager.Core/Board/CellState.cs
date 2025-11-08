@@ -11,6 +11,7 @@ namespace Forager.Core {
         Grass,
         Woods,
         Hole,
-        Start
+        Start,
+        Stone
     }
 }

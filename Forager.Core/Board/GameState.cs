@@ -12,6 +12,8 @@ namespace Forager.Core.Board {
         private readonly HashSet<Cell> _tourCells = [];
         private readonly Cell[] _shroomCells;
         private readonly int _targetDistance;
+        private readonly int _numStoneCells;
+
         private static readonly HashSet<CellState> _shroomPhases = [
             CellState.Start, CellState.Hole, CellState.Forager
         ];
@@ -30,10 +32,12 @@ namespace Forager.Core.Board {
         public bool IsFinished => _isFinished;
         public Cell GetCell(int row, int col) => _cells[row][col];
 
-        public GameState(int fieldSize, int numShrooms) {
+        public GameState(int fieldSize, int numShrooms, int pcStone) {
             _fieldSize = fieldSize;
             _numShrooms = numShrooms;
             _cells = new Cell[_fieldSize][];
+            _numStoneCells = pcStone * fieldSize * fieldSize / 100;
+
             for (int i = 0; i < _fieldSize; i++) {
                 _cells[i] = new Cell[_fieldSize];
                 for (int j = 0; j < _fieldSize; j++) {

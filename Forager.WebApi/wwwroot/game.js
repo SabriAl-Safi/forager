@@ -1,12 +1,11 @@
 ﻿let currentGameId = null;
-let gameSettings = { fieldSize: 10, numShrooms: 10 };
+let gameSettings = { fieldSize: 10, numShrooms: 10, pcStone: 0 };
 const apiBase = '/api/game';
 const setDisp = (id, val) => document.getElementById(id).style.display = val;
 const showModal = id => setDisp(id, 'block');
 const hideModal = id => setDisp(id, 'none');
 const postJson = (url, body) => fetch(url, jsonRequest(body));
 function jsonRequest(body) { return { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) } };
-
 
 async function startNewGame() {
     const response = await postJson(`${apiBase}/new`, gameSettings);
@@ -98,6 +97,7 @@ function showSettings() {
     showModal('settingsModal');
     document.getElementById('fieldSize').value = gameSettings.fieldSize;
     document.getElementById('numShrooms').value = gameSettings.numShrooms;
+    document.getElementById('pcStone').value = gameSettings.pcStone;
 }
 
 function saveSettings() {
@@ -112,12 +112,20 @@ function saveSettings() {
     const numShrooms = parseInt(document.getElementById('numShrooms').value);
     if (numShrooms >= 3 && numShrooms <= 15) {
         gameSettings.numShrooms = numShrooms;
-        showMessage('Settings saved! Start a new game to apply changes.', 'success');
     } else {
         showMessage('Number of mushrooms must be between 3 and 15', 'error');
         return;
     }
 
+    const pcStone = parseInt(document.getElementById('pcStone').value);
+    if (pcStone >= 0 && pcStone <= 25) {
+        gameSettings.pcStone = pcStone;
+    } else {
+        showMessage('Percentage stone wall must be between 0 and 25', 'error');
+        return;
+    }
+
+    showMessage('Settings saved! Start a new game to apply changes.', 'success');
     hideModal('settingsModal');
 }
 

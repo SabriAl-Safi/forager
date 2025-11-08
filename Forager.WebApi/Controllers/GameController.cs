@@ -6,18 +6,16 @@ namespace YourGame.WebApi.Controllers {
     public class GameController : ControllerBase {
         // In-memory storage for demo - use database for production
         private static readonly Dictionary<string, GameState> _activeGames = [];
-        private static readonly Dictionary<string, string> _playerNames = [];
 
-        public record NewGameRequest(int FieldSize, int NumShrooms, string PlayerName);
+        public record NewGameRequest(int FieldSize, int NumShrooms, int PcStone);
 
         [HttpPost("new")]
         public IActionResult CreateNewGame([FromBody] NewGameRequest request) {
             try {
                 var gameId = Guid.NewGuid().ToString();
-                var gameState = new GameState(request.FieldSize, request.NumShrooms);
+                var gameState = new GameState(request.FieldSize, request.NumShrooms, request.PcStone);
 
                 _activeGames[gameId] = gameState;
-                _playerNames[gameId] = request.PlayerName;
 
                 return Ok(new {
                     GameId = gameId,

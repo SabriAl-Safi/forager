@@ -15,6 +15,7 @@ namespace Forager.Core.Board {
         private readonly int _numStoneWalls;
         private readonly Random _rnd = new();
 
+        private static readonly int[] _deltas = [1, -1];
         private static readonly HashSet<CellState> _shroomPhases = [
             CellState.Start, CellState.Hole, CellState.Forager
         ];
@@ -61,35 +62,94 @@ namespace Forager.Core.Board {
         }
 
         private void SpawnStoneWall() {
-            var num = 0;
-            while (num < _numStoneWalls) {
-                var cell = GetRandomCell();
-                if (cell.IsShroom || cell.State == CellState.Stone)
+            for (int num = 0; num < _numStoneWalls; num++) {
+                var cell = GetRandomCell(CellState.Grass);
+                cell.State = CellState.Stone;
+
+                var neighbours = GetNeighbours(cell)
+                    .Where(c => c.State == CellState.Grass)
+                    .ToArray();
+
+                if (neighbours.Length < 2)
                     continue;
 
-                cell.State = CellState.Stone;
-                cell.Ctr = num;
-                num++;
+                var source = neighbours[0];
+                var targets = neighbours[1..].ToHashSet();
+
+                foreach (var bfsCell in BFS(source)) {
+                    targets.Remove(bfsCell);
+                    if (targets.Count == 0)
+                        break;
+                }
+
+                if (targets.Count > 0) {
+                    cell.State = CellState.Grass;
+                    num--;
+                }
             }
         }
 
-        private Cell[] SpawnShrooms() {
-            var shroomCells = new Cell[_numShrooms];
-            var num = 0;
-            while (num < _numShrooms) {
-                var cell = GetRandomCell();
-                if (cell.IsShroom || cell.State == CellState.Stone)
+        private IEnumerable<Cell> GetNeighbours(Cell cell) {
+            foreach (var rowDelta in _deltas) {
+                var newRow = cell.Row + rowDelta;
+
+                if (!IsInField(newRow, cell.Col))
                     continue;
 
+                yield return _cells[newRow][cell.Col];
+            }
+
+            foreach (var colDelta in _deltas) {
+                var newCol = cell.Col + colDelta;
+
+                if (!IsInField(cell.Row, newCol))
+                    continue;
+
+                yield return _cells[cell.Row][newCol];
+            }
+        }
+
+        private IEnumerable<Cell> BFS(Cell cell) {
+            var queue = new Queue<Cell>();
+            var processed = new HashSet<Cell>();
+            queue.Enqueue(cell);
+
+            while (queue.Count > 0) {
+                var curCell = queue.Dequeue();
+                yield return curCell;
+
+                foreach (var nbCell in GetNeighbours(curCell)) {
+                    if (nbCell.State == CellState.Stone)
+                        continue;
+
+                    if (processed.Contains(nbCell))
+                        continue;
+
+                    queue.Enqueue(nbCell);
+                }
+                processed.Add(curCell);
+            }
+        }
+
+        private bool IsInField(int row, int col) => row >= 0 && col >= 0 && row < _fieldSize && col < _fieldSize;
+
+        private Cell[] SpawnShrooms() {
+            var shroomCells = new Cell[_numShrooms];
+            for (int num = 0; num < _numShrooms; num++) {
+                var cell = GetRandomCell(CellState.Grass);
                 cell.State = CellState.Shroom;
                 cell.Ctr = num;
                 shroomCells[num] = cell;
-                num++;
             }
             return shroomCells;
         }
 
-        private Cell GetRandomCell() => _cells[_rnd.Next(0, _fieldSize)][_rnd.Next(0, _fieldSize)];
+        private Cell GetRandomCell(CellState? state = null) {
+            Cell cell;
+            do { cell = _cells[_rnd.Next(0, _fieldSize)][_rnd.Next(0, _fieldSize)]; }
+            while (state != null && cell.State != state);
+            return cell;
+        }
 
         private int[][] GetDistanceMatrix() {
             var matrix = new int[_numShrooms][];

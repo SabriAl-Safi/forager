@@ -1,5 +1,5 @@
 ﻿let currentGameId = null;
-let gameSettings = { fieldSize: 10, numShrooms: 10, pcStone: 0 };
+let gameSettings = { fieldSize: 10, numShrooms: 10, pcStone: 10 };
 const apiBase = '/api/game';
 const setDisp = (id, val) => document.getElementById(id).style.display = val;
 const showModal = id => setDisp(id, 'block');

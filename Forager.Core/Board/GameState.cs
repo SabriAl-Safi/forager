@@ -25,6 +25,7 @@ namespace Forager.Core.Board {
         private int _tourDistance = 0;
         private List<Cell> _lastChangedCells = [];
         private bool _isFinished = false;
+        private Route[][] _routeMatrix;
 
         public int NumShroomsFound => _tourCells.Count;
         public int CurrentDistance => _tourDistance;
@@ -44,8 +45,11 @@ namespace Forager.Core.Board {
             SpawnStoneWall();
             _shroomCells = SpawnShrooms();
 
-            var matrix = GetDistanceMatrix();
-            var tsp = new TSP(matrix);
+            _routeMatrix = new Router(_shroomCells, this).GetMatrix();
+            var costMatrix = _routeMatrix
+                .Select(ar => ar.Select(r => r.Cost).ToArray())
+                .ToArray();
+            var tsp = new TSP(costMatrix);
             var tour = tsp.Solve();
             _targetDistance = tour.Cost;
             _lastChangedCells = [.. AllCells];
@@ -89,7 +93,7 @@ namespace Forager.Core.Board {
             }
         }
 
-        private IEnumerable<Cell> GetNeighbours(Cell cell) {
+        public IEnumerable<Cell> GetNeighbours(Cell cell) {
             foreach (var rowDelta in _deltas) {
                 var newRow = cell.Row + rowDelta;
 
@@ -131,7 +135,8 @@ namespace Forager.Core.Board {
             }
         }
 
-        private bool IsInField(int row, int col) => row >= 0 && col >= 0 && row < _fieldSize && col < _fieldSize;
+        private bool IsInField(int row, int col) =>
+            row >= 0 && col >= 0 && row < _fieldSize && col < _fieldSize;
 
         private Cell[] SpawnShrooms() {
             var shroomCells = new Cell[_numShrooms];
@@ -151,18 +156,6 @@ namespace Forager.Core.Board {
             return cell;
         }
 
-        private int[][] GetDistanceMatrix() {
-            var matrix = new int[_numShrooms][];
-            for (int i = 0; i < _numShrooms; i++) {
-                var source = _shroomCells[i];
-                matrix[i] = new int[_numShrooms];
-                for (int j = 0; j < _numShrooms; j++) {
-                    matrix[i][j] = source.DistanceTo(_shroomCells[j]);
-                }
-            }
-            return matrix;
-        }
-
         public void Move(int toRow, int toCol) {
             _lastChangedCells = [];
             foreach (var cell in AllCells) {
@@ -173,20 +166,25 @@ namespace Forager.Core.Board {
 
             var toCell = _cells[toRow][toCol];
             toCell.State = CellState.Forager;
+            var toIdx = Array.IndexOf(_shroomCells, toCell);
             _lastChangedCells.Add(toCell);
             _tourCells.Add(toCell);
-            if (_lastClicked != null) {
-                _lastClicked.State = _lastClicked == _start ? CellState.Start : CellState.Hole;
-                _tourDistance += toCell.DistanceTo(_lastClicked);
-                var route = RouteTo(_lastClicked, toCell);
-                foreach (var routeCell in route) {
-                    routeCell.IsTrodden = true;
-                    _lastChangedCells.Add(routeCell);
-                }
-                _isFinished = (toCell == _start);
-            } else {
+
+            if (_lastClicked == null) {
+                _lastClicked = toCell;
                 _start = toCell;
+                return;
             }
+
+            var fromIdx = Array.IndexOf(_shroomCells, _lastClicked);
+            _lastClicked.State = _lastClicked == _start ? CellState.Start : CellState.Hole;
+            var route = _routeMatrix[fromIdx][toIdx];
+            _tourDistance += route.Cost;
+            foreach (var routeCell in route.Path) {
+                routeCell.IsTrodden = true;
+                _lastChangedCells.Add(routeCell);
+            }
+            _isFinished = (toCell == _start);
             _lastClicked = toCell;
         }
 
@@ -214,33 +212,5 @@ namespace Forager.Core.Board {
             }
             return _lastChangedCells;
         }
-
-        public List<Cell> RouteTo(Cell from, Cell to) {
-            var rowRange = IntRange(from.Row, to.Row);
-            var colRange = IntRange(from.Col, to.Col);
-
-            if (from.Col == to.Col)
-                return [.. rowRange.Select(r => _cells[r][from.Col])];
-
-            if (from.Row == to.Row)
-                return [.. colRange.Select(c => _cells[from.Row][c])];
-
-            if ((from.Col < to.Col) != (from.Row < to.Row)) {
-                return rowRange
-                    .Select(r => _cells[r][from.Col])
-                    .Concat(colRange.Select(c => _cells[to.Row][c]).Skip(1))
-                    .ToList();
-            }
-
-            return colRange
-                .Select(c => _cells[from.Row][c])
-                .Concat(rowRange.Select(r => _cells[r][to.Col]).Skip(1))
-                .ToList();
-        }
-
-        private static IEnumerable<int> IntRange(int start, int end) =>
-            start < end ?
-            Enumerable.Range(start, 1 + end - start) :
-            Enumerable.Range(end, 1 + start - end).Reverse();
     }
 }

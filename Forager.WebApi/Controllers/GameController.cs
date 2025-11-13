@@ -7,14 +7,13 @@ namespace Forager.WebApi.Controllers {
         // In-memory storage for demo - use database for production
         private static readonly Dictionary<string, GameState> _activeGames = [];
 
-        public record NewGameRequest(int FieldSize, int NumShrooms, int PcStone);
+        public record NewGameRequest(int FieldSize, int NumShrooms, int PcStone, int PcMud);
 
         [HttpPost("new")]
         public IActionResult CreateNewGame([FromBody] NewGameRequest request) {
             try {
                 var gameId = Guid.NewGuid().ToString();
-                var gameState = new GameState(request.FieldSize, request.NumShrooms, request.PcStone);
-
+                var gameState = new GameState(request.FieldSize, request.NumShrooms, request.PcStone, request.PcMud);
                 _activeGames[gameId] = gameState;
 
                 return Ok(new {

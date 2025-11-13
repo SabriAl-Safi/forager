@@ -12,8 +12,8 @@ namespace Forager.Core.Board {
         private readonly HashSet<Cell> _tourCells = [];
         private readonly Cell[] _shroomCells;
         private readonly int _targetDistance;
-        private readonly int _numStoneWalls;
         private readonly Random _rnd = new();
+        private readonly Route[][] _routeMatrix;
 
         private static readonly int[] _deltas = [1, -1];
         private static readonly HashSet<CellState> _shroomPhases = [
@@ -25,7 +25,6 @@ namespace Forager.Core.Board {
         private int _tourDistance = 0;
         private List<Cell> _lastChangedCells = [];
         private bool _isFinished = false;
-        private Route[][] _routeMatrix;
 
         public int NumShroomsFound => _tourCells.Count;
         public int CurrentDistance => _tourDistance;
@@ -35,14 +34,16 @@ namespace Forager.Core.Board {
         public bool IsFinished => _isFinished;
         public Cell GetCell(int row, int col) => _cells[row][col];
 
-        public GameState(int fieldSize, int numShrooms, int pcStone) {
+        public GameState(int fieldSize, int numShrooms, int pcStone, int pcMud) {
             _fieldSize = fieldSize;
             _numShrooms = numShrooms;
             _cells = new Cell[_fieldSize][];
-            _numStoneWalls = pcStone * fieldSize * fieldSize / 100;
+            var numStoneWalls = pcStone * fieldSize * fieldSize / 100;
+            var numMuds = pcMud * fieldSize * fieldSize / 100;
 
             SpawnGrass();
-            SpawnStoneWall();
+            SpawnStoneWall(numStoneWalls);
+            SpawnMud(numMuds);
             _shroomCells = SpawnShrooms();
 
             _routeMatrix = new Router(_shroomCells, this).GetMatrix();
@@ -59,14 +60,13 @@ namespace Forager.Core.Board {
             for (int i = 0; i < _fieldSize; i++) {
                 _cells[i] = new Cell[_fieldSize];
                 for (int j = 0; j < _fieldSize; j++) {
-                    var cell = new Cell { Row = i, Col = j, State = CellState.Grass };
-                    _cells[i][j] = cell;
+                    _cells[i][j] = new(i, j);
                 }
             }
         }
 
-        private void SpawnStoneWall() {
-            for (int num = 0; num < _numStoneWalls; num++) {
+        private void SpawnStoneWall(int numStoneWalls) {
+            for (int num = 0; num < numStoneWalls; num++) {
                 var cell = GetRandomCell(CellState.Grass);
                 cell.State = CellState.Stone;
 
@@ -90,6 +90,13 @@ namespace Forager.Core.Board {
                     cell.State = CellState.Grass;
                     num--;
                 }
+            }
+        }
+
+        private void SpawnMud(int numMuds) {
+            for (int num = 0; num < numMuds; num++) {
+                var cell = GetRandomCell(CellState.Grass);
+                cell.State = CellState.Mud;
             }
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Forager.Core {
+namespace Forager.Core.Board {
     public enum CellState {
         Shroom,
         Forager,
@@ -12,6 +12,7 @@ namespace Forager.Core {
         Woods,
         Hole,
         Start,
-        Stone
+        Stone,
+        Mud
     }
 }

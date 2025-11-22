@@ -1,5 +1,5 @@
 ﻿let currentGameId = null;
-let gameSettings = { fieldSize: 10, numShrooms: 10, pcStone: 10, pcMud = 10 };
+let gameSettings = { fieldSize: 12, numShrooms: 12, pcStone: 10, pcWoods: 25 };
 const apiBase = '/api/game';
 const setDisp = (id, val) => document.getElementById(id).style.display = val;
 const showModal = id => setDisp(id, 'block');
@@ -74,7 +74,7 @@ function updateBoard(cells) {
     }
 }
 
-const cellFiles = { 1: 'forager-80x80.png', 2: 'grass-80x80.png', 4: 'hole-80x80.png', 5: 'flaghole-80x80.png', 6: 'stone.jpg' };
+const cellFiles = { 1: 'forager-80x80.png', 2: 'grass-80x80.png', 3: 'trees-80x80.png', 4: 'hole-80x80.png', 5: 'flaghole-80x80.png', 6: 'stone.jpg' };
 const getCellFileName = (cell) => cell.state === 0 ? `${cell.ctr % 10}.jpg` : isTroddenGrass(cell) ? `troddengrass-80x80.png` : cellFiles[cell.state];
 const isTroddenGrass = (cell) => (cell.state === 2 && cell.isTrodden);
 
@@ -98,6 +98,7 @@ function showSettings() {
     document.getElementById('fieldSize').value = gameSettings.fieldSize;
     document.getElementById('numShrooms').value = gameSettings.numShrooms;
     document.getElementById('pcStone').value = gameSettings.pcStone;
+    document.getElementById('pcWoods').value = gameSettings.pcWoods;
 }
 
 function saveSettings() {
@@ -121,7 +122,15 @@ function saveSettings() {
     if (pcStone >= 0 && pcStone <= 25) {
         gameSettings.pcStone = pcStone;
     } else {
-        showMessage('Percentage stone wall must be between 0 and 25', 'error');
+        showMessage('Stoniness must be between 0 and 25', 'error');
+        return;
+    }
+
+    const pcWoods = parseInt(document.getElementById('pcWoods').value);
+    if (pcWoods >= 0 && pcWoods <= 25) {
+        gameSettings.pcWoods = pcWoods;
+    } else {
+        showMessage('Woodiness must be between 0 and 25', 'error');
         return;
     }
 

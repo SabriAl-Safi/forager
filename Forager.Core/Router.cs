@@ -6,7 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Forager.Core {
-    public record Route(Cell Source, Cell Target, Cell[] Path) { public int Cost = Path.Length - 1; }
+    public record Route(Cell Source, Cell Target, Cell[] Path) {
+        public int Cost = Path.Take(Path.Length - 1).Sum(c => c.NumSteps);
+    }
 
     public record Router(Cell[] Cells, GameState State) {
         public Route[][] GetMatrix() => [.. Cells.Select(GetArray)];
@@ -18,21 +20,24 @@ namespace Forager.Core {
 
         private Dictionary<Cell, Cell> GetPrev(Cell source) {
             var prev = new Dictionary<Cell, Cell>() { [source] = source };
+            var bestSteps = new Dictionary<Cell, int>() { [source] = 0 };
             var queue = new Queue<Cell>();
             queue.Enqueue(source);
 
             while (queue.Count > 0) {
-                var curCell = queue.Dequeue();
+                var cur = queue.Dequeue();
+                var bestCur = bestSteps[cur];
 
-                foreach (var nbCell in State.GetNeighbours(curCell)) {
-                    if (nbCell.State == CellState.Stone)
+                foreach (var nxt in State.GetNeighbours(cur)) {
+                    if (nxt.State == CellState.Stone)
                         continue;
 
-                    if (prev.ContainsKey(nbCell))
+                    if (bestSteps.TryGetValue(nxt, out var bestNxt) && bestNxt < bestCur + cur.NumSteps)
                         continue;
 
-                    prev[nbCell] = curCell;
-                    queue.Enqueue(nbCell);
+                    prev[nxt] = cur;
+                    bestSteps[nxt] = bestCur + cur.NumSteps;
+                    queue.Enqueue(nxt);
                 }
             }
 

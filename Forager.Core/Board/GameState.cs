@@ -34,16 +34,16 @@ namespace Forager.Core.Board {
         public bool IsFinished => _isFinished;
         public Cell GetCell(int row, int col) => _cells[row][col];
 
-        public GameState(int fieldSize, int numShrooms, int pcStone, int pcMud) {
+        public GameState(int fieldSize, int numShrooms, int pcStone, int pcWoods) {
             _fieldSize = fieldSize;
             _numShrooms = numShrooms;
             _cells = new Cell[_fieldSize][];
             var numStoneWalls = pcStone * fieldSize * fieldSize / 100;
-            var numMuds = pcMud * fieldSize * fieldSize / 100;
+            var numWoods = pcWoods * fieldSize * fieldSize / 100;
 
             SpawnGrass();
             SpawnStoneWall(numStoneWalls);
-            SpawnMud(numMuds);
+            SpawnWoods(numWoods);
             _shroomCells = SpawnShrooms();
 
             _routeMatrix = new Router(_shroomCells, this).GetMatrix();
@@ -93,10 +93,10 @@ namespace Forager.Core.Board {
             }
         }
 
-        private void SpawnMud(int numMuds) {
+        private void SpawnWoods(int numMuds) {
             for (int num = 0; num < numMuds; num++) {
                 var cell = GetRandomCell(CellState.Grass);
-                cell.State = CellState.Mud;
+                cell.State = CellState.Woods;
             }
         }
 

@@ -12,7 +12,6 @@ namespace Forager.Core.Board {
         Woods,
         Hole,
         Start,
-        Stone,
-        Mud
+        Stone
     }
 }

@@ -10,5 +10,6 @@ namespace Forager.Core.Board {
         public CellState State { get; set; } = CellState.Grass;
         public int Ctr { get; set; } = 0;
         public bool IsTrodden { get; set; } = false;
+        public int NumSteps => (State == CellState.Woods ? 2 : 1);
     }
 }
